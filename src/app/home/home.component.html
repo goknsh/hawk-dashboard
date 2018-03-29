@@ -1,20 +1,151 @@
-<!--
-  ~ Copyright (c) 2016 VMware, Inc. All Rights Reserved.
-  ~ This software is released under MIT license.
-  ~ The full license information can be found in LICENSE in the root directory of this project.
-  -->
-<p>This is a Clarity seed application. This is the default page that loads for the application.</p>
-
-<clr-dropdown>
-    <button clrDropdownTrigger class="btn">
-        Dropdown
-        <clr-icon shape="caret down"></clr-icon>
-    </button>
-    <clr-dropdown-menu *clrIfOpen clrPosition="bottom-right">
-        <a clrDropdownItem href="javascript://">Action 1</a>
-        <a clrDropdownItem href="javascript://">Action 2</a>
-        <div class="dropdown-divider"></div>
-        <a clrDropdownItem href="javascript://">Link 1</a>
-        <a clrDropdownItem href="javascript://">Link 2</a>
-    </clr-dropdown-menu>
-</clr-dropdown>
+<section class="page">
+    <div class="hero-outer">
+        <div class="hero">
+            <h1>Free website uptime monitoring</h1>
+            <p>Ping is a free website uptime monitor that notifies you when your website is down or the latency is high.</p>
+            <div class="btn-group">
+                <button routerLink="/login/new" class="btn">Login</button>
+                <button routerLink="/signup" class="btn btn-primary">Sign up &rarr;</button>
+            </div>
+        </div>
+    </div>
+    
+    <h1>Features</h1>
+    <div class="row feature-cards">
+        <div class="col-lg-3 col-md-8 col-sm-12 col-xs-12">
+            <div class="card">
+                <div class="card-header">
+                    Notifications
+                </div>
+                <div class="card-block">
+                    <!--<div class="card-title">-->
+                    <!--</div>-->
+                    <div class="card-text">
+                        Get notified by email anytime your website goes down, the latency is high or if your website's SSL expires (SSL expiry notification coming soon).
+                    </div>
+                </div>
+                <!--<div class="card-footer">-->
+                <!--    <button class="btn btn-sm btn-link">Footer Action 1</button>-->
+                <!--    <button class="btn btn-sm btn-link">Footer Action 2</button>-->
+                <!--</div>-->
+            </div>
+        </div>
+        
+        <div class="col-lg-3 col-md-8 col-sm-12 col-xs-12">
+            <div class="card">
+                <div class="card-header">
+                    Regular Checks
+                </div>
+                <div class="card-block">
+                    <!--<div class="card-title">-->
+                    <!--</div>-->
+                    <div class="card-text">
+                        Ping will check if your website is down, website's latency and if your SSL is valid every five minutes.
+                    </div>
+                </div>
+                <!--<div class="card-footer">-->
+                <!--    <button class="btn btn-sm btn-link">Footer Action 1</button>-->
+                <!--    <button class="btn btn-sm btn-link">Footer Action 2</button>-->
+                <!--</div>-->
+            </div>
+        </div>
+        
+        <div class="col-lg-3 col-md-8 col-sm-12 col-xs-12">
+            <div class="card">
+                <div class="card-header">
+                    Extensive Stats
+                </div>
+                <div class="card-block">
+                    <!--<div class="card-title">-->
+                    <!--</div>-->
+                    <div class="card-text">
+                        Ping collects statistics like latency at a certain speed, nameserver lookup time, data downloaded and more.
+                    </div>
+                </div>
+                <!--<div class="card-footer">-->
+                <!--    <button class="btn btn-sm btn-link">Footer Action 1</button>-->
+                <!--    <button class="btn btn-sm btn-link">Footer Action 2</button>-->
+                <!--</div>-->
+            </div>
+        </div>
+        
+        <div class="col-lg-3 col-md-8 col-sm-12 col-xs-12">
+            <div class="card">
+                <div class="card-header">
+                    Many Locations
+                </div>
+                <div class="card-block">
+                    <!--<div class="card-title">-->
+                    <!--</div>-->
+                    <div class="card-text">
+                        Ping can monitor your websites from several locations, so you'll get different stats for each location.
+                    </div>
+                </div>
+                <!--<div class="card-footer">-->
+                <!--    <button class="btn btn-sm btn-link">Footer Action 1</button>-->
+                <!--    <button class="btn btn-sm btn-link">Footer Action 2</button>-->
+                <!--</div>-->
+            </div>
+        </div>
+    </div>
+    
+    <h1>How does it work?</h1>
+    <div class="row feature-cards">
+        <div class="col-lg-4 col-md-8 col-sm-12 col-xs-12">
+            <div class="card">
+                <div class="card-header">
+                    Free Hosting
+                </div>
+                <div class="card-block">
+                    <!--<div class="card-title">-->
+                    <!--</div>-->
+                    <div class="card-text">
+                        Currently, Ping runs on free hosting services like <a href="http://heliohost.org/">heliohost.org</a>, which allows us to keep Ping free for you.
+                    </div>
+                </div>
+                <!--<div class="card-footer">-->
+                <!--    <button class="btn btn-sm btn-link">Footer Action 1</button>-->
+                <!--    <button class="btn btn-sm btn-link">Footer Action 2</button>-->
+                <!--</div>-->
+            </div>
+        </div>
+        
+        <div class="col-lg-4 col-md-8 col-sm-12 col-xs-12">
+            <div class="card">
+                <div class="card-header">
+                    PHP & cURL
+                </div>
+                <div class="card-block">
+                    <!--<div class="card-title">-->
+                    <!--</div>-->
+                    <div class="card-text">
+                        Ping ulilizes PHP to make cURL requests and it sorts through the response while organizing the data.
+                    </div>
+                </div>
+                <!--<div class="card-footer">-->
+                <!--    <button class="btn btn-sm btn-link">Footer Action 1</button>-->
+                <!--    <button class="btn btn-sm btn-link">Footer Action 2</button>-->
+                <!--</div>-->
+            </div>
+        </div>
+        
+        <div class="col-lg-4 col-md-8 col-sm-12 col-xs-12">
+            <div class="card">
+                <div class="card-header">
+                    MySQL
+                </div>
+                <div class="card-block">
+                    <!--<div class="card-title">-->
+                    <!--</div>-->
+                    <div class="card-text">
+                        MySQL is the database that Ping uses to store data and other statistics for each of your websites. We archive data every week, but also <a href="https://useping.ga/archive">post copies of a JSON file of the archived data</a>.
+                    </div>
+                </div>
+                <!--<div class="card-footer">-->
+                <!--    <button class="btn btn-sm btn-link">Footer Action 1</button>-->
+                <!--    <button class="btn btn-sm btn-link">Footer Action 2</button>-->
+                <!--</div>-->
+            </div>
+        </div>
+    </div>
+</section>

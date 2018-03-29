@@ -1,0 +1,65 @@
+<div class="login-wrapper">
+    <form [formGroup]="signup" (ngSubmit)="signUpUser(signup.value)" class="login">
+        <label class="title">
+            Signup for Ping
+            <h5 class="hint">Create an account for Ping</h5>
+        </label>
+        <div class="login-group">
+            
+            <div class="form-group">
+                <p>Name</p>
+                <label for="name"
+                        aria-haspopup="true"
+                        role="tooltip"
+                        class="tooltip tooltip-validation tooltip-sm"
+                        [class.invalid]="signup.get('name').invalid
+                            && (signup.get('name').dirty ||
+                            signup.get('name').touched)">
+                    <input id="name" spellcheck="false" type="text" placeholder="Jason Pixel" formControlName="name">
+                    <span class="tooltip-content">
+                        Name is required.
+                    </span>
+                </label>
+            </div>
+            
+            <div class="form-group">
+                <p>Email</p>
+                <label for="email"
+                        aria-haspopup="true"
+                        role="tooltip"
+                        class="tooltip tooltip-validation tooltip-sm"
+                        [class.invalid]="signup.get('email').invalid
+                            && (signup.get('email').dirty ||
+                            signup.get('email').touched)">
+                    <input id="email" spellcheck="false" type="email" placeholder="jason@usehype.ga" formControlName="email">
+                    <span class="tooltip-content">
+                        The field is empty or the email is invalid.
+                    </span>
+                </label>
+            </div>
+            
+            <div class="form-group">
+                <p>Password</p>
+                <label for="password"
+                        aria-haspopup="true"
+                        role="tooltip"
+                        class="tooltip tooltip-validation tooltip-sm"
+                        [class.invalid]="signup.get('password').invalid
+                            && (signup.get('password').dirty ||
+                            signup.get('password').touched)">
+                    <input id="password" type="password" placeholder="No one will know." formControlName="password">
+                    <span class="tooltip-content">
+                        Password is required.
+                    </span>
+                </label>
+            </div>
+            
+            <div class="error {{errorDisplay}}">
+                {{ errorMsg }}
+            </div>
+            
+            <button type="submit" [disabled]="signup.invalid" class="btn btn-primary">{{ signupstatus }}</button>
+            <a href="#" routerLink="/login/new" class="signup">Login</a>
+        </div>
+    </form>
+</div>

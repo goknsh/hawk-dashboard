@@ -1,0 +1,36 @@
+.page {
+    .hero-outer {
+        height: 30vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 400px;
+        text-align: center;
+        .hero {
+            font-weight: 600;
+            margin: 0 0 0 2rem;
+            p {
+                max-width: 600px;
+                margin: 0.7rem auto 1rem auto;
+            }
+        }
+    }
+    .content {
+        margin: 0 auto;
+        max-width: 760px;
+        padding: 0 1rem;
+        .para {
+            margin-left: 1.1em;
+        }
+        ol[type=i] {
+            margin-left: 2.1em;
+        }
+    }
+    @media (max-width: 992px) {
+        .hero-outer {
+            .hero {
+                margin: 0;
+            }
+        }
+    }
+}

@@ -1,1 +1,22 @@
 /* You can add global styles to this file, and also import other style files */
+* {
+    font-family: 'IBM Plex Sans' !important;
+}
+
+h1, h2, h3, .card-header {
+    font-weight: 600;
+}
+
+.datagrid-body {
+    overflow-y: hidden;
+}
+
+.footer {
+    margin-top: 3rem;
+    background-color: transparent !important;
+    color: #565656 !important;
+}
+
+.footer .header .header-nav .nav-link, header .header-nav .nav-link {
+    color: #565656;
+}
