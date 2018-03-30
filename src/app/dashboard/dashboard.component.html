@@ -52,6 +52,25 @@
                     </div>
                 </div>
             </div>
+            <div class="col-lg-4 col-md-8 col-sm-12 col-xs-12">
+                <div class="card clickable" routerLink="/dashboard/add">
+                    <div class="card-header">
+                        <h3><a href="/dashboard/add" routerLink="/dashboard/add">Add a site &rarr;</a></h3>
+                    </div>
+                    <div class="card-block">
+                        <!--<div class="card-title">-->
+                        <!--</div>-->
+                        <div class="card-text">
+                            Thanks for using Ping! We’d really appreciate it if you could donate to hype <a class="plain" href="https://paypal.me/akaankshraj/5" target="_blank">via PayPal</a> or <a class="plain" href="https://www.buymeacoffee.com/ark">buy me a coffee</a> (to keep things free), share it with others and <a class="plain" href="https://usehype.ga/" target="_blank">checkout our other products</a>.<br><a href="/stats" routerLink="/stats">View Ping’s statistics</a>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <button title="Current Version" class="btn btn-sm btn-link">v0.5.0-ng</button>
+                        <button title="Click to go to an alternate Version" href="https://api.useping.ga/" class="btn btn-sm btn-link">v0.5.0-php</button>
+                        <button class="btn btn-sm btn-link">Made by akaanksh.</button>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -170,7 +189,7 @@
                     <div class="tab2">
                         <h2>Outages</h2>
                         <clr-datagrid>
-                            <clr-dg-placeholder>We&rsquo;re sorting the data.</clr-dg-placeholder>
+                            <clr-dg-placeholder>No outages!</clr-dg-placeholder>
                             <clr-dg-column>Time</clr-dg-column>
                             <clr-dg-column>
                                 <ng-container *clrDgHideableColumn>Code (US / EU / IN)</ng-container>
@@ -265,7 +284,7 @@
         <div class="login-wrapper">
             <form [formGroup]="addWebsite" (ngSubmit)="addWebsiteToDB(addWebsite.value)" class="login">
                 <label class="title">
-                    Add new websites
+                    Add new website
                 </label>
                 <div class="login-group">
                     <div class="form-group">
@@ -277,7 +296,7 @@
                                 [class.invalid]="addWebsite.get('url').invalid
                                     && (addWebsite.get('url').dirty ||
                                     addWebsite.get('url').touched)">
-                            <input id="url" spellcheck="false" type="url" placeholder="https://usehype.ga/" formControlName="url">
+                            <input id="url" spellcheck="false" type="url" placeholder="https://useping.ga/" formControlName="url">
                             <span class="tooltip-content">
                                 The field is empty or the URL is invalid.
                             </span>
@@ -285,7 +304,23 @@
                     </div>
                     
                     <div class="form-group">
-                        <p>Timeout</p>
+                        <p>Title</p>
+                        <label for="title"
+                                aria-haspopup="true"
+                                role="tooltip"
+                                class="tooltip tooltip-validation tooltip-sm"
+                                [class.invalid]="addWebsite.get('title').invalid
+                                    && (addWebsite.get('title').dirty ||
+                                    addWebsite.get('title').touched)">
+                            <input id="title" type="text" placeholder="Ping" formControlName="title">
+                            <span class="tooltip-content">
+                                A title for your website is required.
+                            </span>
+                        </label>
+                    </div>
+                    
+                    <div class="form-group">
+                        <p>Timeout (ms) @ 0.01mbps</p>
                         <label for="timeout"
                                 aria-haspopup="true"
                                 role="tooltip"
@@ -300,7 +335,7 @@
                         </label>
                     </div>
                     
-                    <div class="error {{errorDisplayAdd}}">
+                    <div class="{{errorDisplayAdd}}">
                         {{ errorMsgAdd }}
                     </div>
                     
