@@ -105,7 +105,7 @@ export class DashboardComponent implements OnInit {
   
   getOverviewData() {
     this.userData = JSON.parse(localStorage.getItem("currentUser"));
-    this.http.get(`https://api.useping.ga/api/v1/new?site=get&email=${this.userData.email}&pass=${this.userData.pass}`).subscribe(
+    this.http.get(`https://us.useping.ga/api/v1/new?site=get&email=${this.userData.email}&pass=${this.userData.pass}`).subscribe(
       data => {
         this.reqData = data; this.localTimes = []; this.sslTimes = [];
         let i = 0; let notOk = 0;
@@ -143,7 +143,7 @@ export class DashboardComponent implements OnInit {
     this.overviewDisplay = false;
     
     this.userData = JSON.parse(localStorage.getItem("currentUser"));
-    this.http.get(`https://api.useping.ga/api/v1/new?site=more&id=${id}&email=${this.userData.email}&pass=${this.userData.pass}`).subscribe(
+    this.http.get(`https://us.useping.ga/api/v1/new?site=more&id=${id}&email=${this.userData.email}&pass=${this.userData.pass}`).subscribe(
       data => {
         this.moreDisplayStatus = "Everything is working!";
         this.moreName = data["name"];
@@ -315,7 +315,7 @@ export class DashboardComponent implements OnInit {
   
   addWebsiteToDB(website) {
     this.addWebsiteStatus = "Contacting server...";
-    this.http.get<response>(`https://api.useping.ga/api/v1/new?add=true&url=${website.url}&title=${website.title}&timeout=${website.timeout}&email=${this.userData.email}&pass=${this.userData.pass}`).subscribe(
+    this.http.get<response>(`https://us.useping.ga/api/v1/new?add=true&url=${website.url}&title=${website.title}&timeout=${website.timeout}&email=${this.userData.email}&pass=${this.userData.pass}`).subscribe(
       data => {
         if (data.response === "mismatch") {
           this.errorMsgAdd = "Incorrect email or password or account does not exist."

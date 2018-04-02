@@ -44,7 +44,7 @@ export class SignupComponent implements OnInit {
   
   signUpUser(credentials) {
     this.signupstatus = "Contacting server...";
-    this.http.get<response>(`https://api.useping.ga/api/v1/new?signup=true&name=${credentials.name}&email=${credentials.email}&pass=${credentials.password}`).subscribe(
+    this.http.get<response>(`https://us.useping.ga/api/v1/new?signup=true&name=${credentials.name}&email=${credentials.email}&pass=${credentials.password}`).subscribe(
       data => {
         if (data.response === "exists") {
           this.errorMsg = "An account with that email already exist."

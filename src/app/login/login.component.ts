@@ -66,7 +66,7 @@ export class LoginComponent implements OnInit {
    
   loginUser(credentials) {
     this.loginstatus = "Contacting server...";
-    this.http.get<response>(`https://api.useping.ga/api/v1/new?login=true&email=${credentials.email}&pass=${credentials.password}`).subscribe(
+    this.http.get<response>(`https://us.useping.ga/api/v1/new?login=true&email=${credentials.email}&pass=${credentials.password}`).subscribe(
       data => {
         if (data.response === "mismatch") {
           this.errorMsg = "Incorrect email or password or account does not exist."
