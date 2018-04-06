@@ -1,4 +1,20 @@
 <clr-main-container>
+  <clr-alerts>
+    <clr-alert [clrAlertType]="'danger'" [clrAlertAppLevel]="true">
+        <div class="alert-item">
+            <span class="alert-text">
+              Our hosting provider is having problems, so our backend is down. We are considering alternatives.
+            </span>
+        </div>
+    </clr-alert>
+    <clr-alert [clrAlertType]="'success'" [clrAlertAppLevel]="true">
+        <div class="alert-item">
+            <span class="alert-text">
+              FYI: We are doing a complete backend overhaul, which will make the apps much faster and lots of new features are being added. Also, more regions are being added.
+            </span>
+        </div>
+    </clr-alert>
+  </clr-alerts>
   <clr-header class="header-5">
     <div class="branding">
       <a href="#" routerLink="/home" class="nav-link">
