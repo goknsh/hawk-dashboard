@@ -1,31 +1,30 @@
-
-<svg width="1004" height="1460" viewBox="0 0 1004 1460" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="1004" height="1460" viewBox="0 0 1004 1460" version="1.1">
 <title>Group</title>
 <desc>Created using Figma</desc>
 <g id="Canvas" transform="matrix(4 0 0 4 -992 536)">
 <g id="Group">
 <g id="Vector 2">
-<use xlink:href="#path0_stroke" transform="translate(260 -6)" fill="#3FB0E5"/>
+<use xlink:href="#path0_stroke" transform="translate(260 -6)" fill="#007CBB"/>
 </g>
 <g id="Ellipse 2">
-<use xlink:href="#path1_fill" transform="translate(406 -70)" fill="#3FB0E5"/>
+<use xlink:href="#path1_fill" transform="translate(406 -70)" fill="#007CBB"/>
 </g>
 <g id="Vector">
-<use xlink:href="#path2_stroke" transform="translate(371 -133)" fill="#3FB0E5"/>
+<use xlink:href="#path2_stroke" transform="translate(371 -133)" fill="#007CBB"/>
 </g>
 <g id="Vector">
-<use xlink:href="#path3_stroke" transform="matrix(6.12323e-17 1 -1 6.12323e-17 489 -6)" fill="#3FB0E5"/>
+<use xlink:href="#path3_stroke" transform="matrix(6.12323e-17 1 -1 6.12323e-17 489 -6)" fill="#007CBB"/>
 </g>
 <g id="Ellipse">
 <mask id="mask0_outline_ins">
 <use xlink:href="#path4_fill" fill="white" transform="translate(248 -134)"/>
 </mask>
 <g mask="url(#mask0_outline_ins)">
-<use xlink:href="#path5_stroke_2x" transform="translate(248 -134)" fill="#3FB0E5"/>
+<use xlink:href="#path5_stroke_2x" transform="translate(248 -134)" fill="#007CBB"/>
 </g>
 </g>
 <g id="Rectangle">
-<use xlink:href="#path6_fill" transform="translate(248 -6)" fill="#3FB0E5"/>
+<use xlink:href="#path6_fill" transform="translate(248 -6)" fill="#007CBB"/>
 </g>
 </g>
 </g>
