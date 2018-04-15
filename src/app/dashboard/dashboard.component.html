@@ -32,77 +32,78 @@
             </div>
         </div>
         <div class="content">
-            <form class="form" [formGroup]="emailChange" (ngSubmit)="emailChangeTo(emailChange.value)">
-                <section class="form-block">
-                    <label class="main">Change Email</label>
-                    <div class="form-group">
-                        <label for="currentEmail">Current Email</label>
-                        <input type="text" value="{{this.userData.email}}" disabled>
-                    </div>
-                    <div class="form-group">
-                        <label for="changeEmailTo">Change Email to</label>
-                        <label for="changeEmailTo"
-                            aria-haspopup="true"
-                            role="tooltip"
-                            class="tooltip tooltip-validation tooltip-sm"
-                            [class.invalid]="emailChange.get('emailChangeToThis').invalid
-                                && (emailChange.get('emailChangeToThis').dirty || emailChange.get('emailChangeToThis').touched)">
-                            <input type="email" spellcheck="false" formControlName="emailChangeToThis">
-                            <span class="tooltip-content">
-                                Change Email to must be valid, cannot be empty or may not be your previous email. 
-                            </span>
-                        </label>
-                    </div>
-                    <button class="btn btn-primary" type="submit"
-                        [disabled]="emailChange.invalid">{{emailControlButton}}</button>
-                </section>
-            </form>
-            <form class="form" [formGroup]="passwordChange" (ngSubmit)="passwordChangeTo(passwordChange.value)">
-                <section class="form-block">
-                    <label class="main">Change Password</label>
-                    <div class="form-group">
-                        <label for="currentPassword">Current Password</label>
-                        <input type="password" placeholder="Soon to be changed">
-                    </div>
-                    <div class="form-group">
-                        <label for="newPassword">New Password</label>
-                        <label for="newPassword"
-                            aria-haspopup="true"
-                            role="tooltip"
-                            class="tooltip tooltip-validation tooltip-sm"
-                            [class.invalid]="passwordChange.get('passwordChangeToThis').invalid
-                                && (passwordChange.get('passwordChangeToThis').dirty || passwordChange.get('passwordChangeToThis').touched)">
-                            <input type="password" spellcheck="false" placeholder="No one shall know" formControlName="passwordChange">
-                            <span class="tooltip-content">
-                                The password cannot be empty.
-                            </span>
-                        </label>
-                    </div>
-                    <button class="btn btn-primary" type="submit"
-                        [disabled]="passwordChange.invalid">{{passwordChangeButton}}</button>
-                </section>
-            </form>
-            <form class="form" [formGroup]="notificationSettings" (ngSubmit)="notificationSettingsChange(notificationSettings.value)">
-                <section class="form-block">
-                    <label class="main">Notification Settings</label>
-                    <div class="form-group">
-                        <label for="newPassword">New Password</label>
-                        <label for="newPassword"
-                            aria-haspopup="true"
-                            role="tooltip"
-                            class="tooltip tooltip-validation tooltip-sm"
-                            [class.invalid]="notificationSettings.get('passwordChangeToThis').invalid
-                                && (notificationSettings.get('passwordChangeToThis').dirty || notificationSettings.get('passwordChangeToThis').touched)">
-                            <input type="password" spellcheck="false" placeholder="No one shall know" formControlName="notificationSettings">
-                            <span class="tooltip-content">
-                                The password cannot be empty.
-                            </span>
-                        </label>
-                    </div>
-                    <button class="btn btn-primary" type="submit"
-                        [disabled]="notificationSettings.invalid">{{notificationButton}}</button>
-                </section>
-            </form>
+            <h3>Soon</h3>
+            <!--<form class="form" [formGroup]="emailChange" (ngSubmit)="emailChangeTo(emailChange.value)">-->
+            <!--    <section class="form-block">-->
+            <!--        <label class="main">Change Email</label>-->
+            <!--        <div class="form-group">-->
+            <!--            <label for="currentEmail">Current Email</label>-->
+            <!--            <input type="text" value="{{this.userData.email}}" disabled>-->
+            <!--        </div>-->
+            <!--        <div class="form-group">-->
+            <!--            <label for="changeEmailTo">Change Email to</label>-->
+            <!--            <label for="changeEmailTo"-->
+            <!--                aria-haspopup="true"-->
+            <!--                role="tooltip"-->
+            <!--                class="tooltip tooltip-validation tooltip-sm"-->
+            <!--                [class.invalid]="emailChange.get('emailChangeToThis').invalid-->
+            <!--                    && (emailChange.get('emailChangeToThis').dirty || emailChange.get('emailChangeToThis').touched)">-->
+            <!--                <input type="email" spellcheck="false" formControlName="emailChangeToThis">-->
+            <!--                <span class="tooltip-content">-->
+            <!--                    Change Email to must be valid, cannot be empty or may not be your previous email. -->
+            <!--                </span>-->
+            <!--            </label>-->
+            <!--        </div>-->
+            <!--        <button class="btn btn-primary" type="submit"-->
+            <!--            [disabled]="emailChange.invalid">{{emailControlButton}}</button>-->
+            <!--    </section>-->
+            <!--</form>-->
+            <!--<form class="form" [formGroup]="passwordChange" (ngSubmit)="passwordChangeTo(passwordChange.value)">-->
+            <!--    <section class="form-block">-->
+            <!--        <label class="main">Change Password</label>-->
+            <!--        <div class="form-group">-->
+            <!--            <label for="currentPassword">Current Password</label>-->
+            <!--            <input type="password" placeholder="Soon to be changed">-->
+            <!--        </div>-->
+            <!--        <div class="form-group">-->
+            <!--            <label for="newPassword">New Password</label>-->
+            <!--            <label for="newPassword"-->
+            <!--                aria-haspopup="true"-->
+            <!--                role="tooltip"-->
+            <!--                class="tooltip tooltip-validation tooltip-sm"-->
+            <!--                [class.invalid]="passwordChange.get('passwordChangeToThis').invalid-->
+            <!--                    && (passwordChange.get('passwordChangeToThis').dirty || passwordChange.get('passwordChangeToThis').touched)">-->
+            <!--                <input type="password" spellcheck="false" placeholder="No one shall know" formControlName="passwordChange">-->
+            <!--                <span class="tooltip-content">-->
+            <!--                    The password cannot be empty.-->
+            <!--                </span>-->
+            <!--            </label>-->
+            <!--        </div>-->
+            <!--        <button class="btn btn-primary" type="submit"-->
+            <!--            [disabled]="passwordChange.invalid">{{passwordChangeButton}}</button>-->
+            <!--    </section>-->
+            <!--</form>-->
+            <!--<form class="form" [formGroup]="notificationSettings" (ngSubmit)="notificationSettingsChange(notificationSettings.value)">-->
+            <!--    <section class="form-block">-->
+            <!--        <label class="main">Notification Settings</label>-->
+            <!--        <div class="form-group">-->
+            <!--            <label for="newPassword">New Password</label>-->
+            <!--            <label for="newPassword"-->
+            <!--                aria-haspopup="true"-->
+            <!--                role="tooltip"-->
+            <!--                class="tooltip tooltip-validation tooltip-sm"-->
+            <!--                [class.invalid]="notificationSettings.get('passwordChangeToThis').invalid-->
+            <!--                    && (notificationSettings.get('passwordChangeToThis').dirty || notificationSettings.get('passwordChangeToThis').touched)">-->
+            <!--                <input type="password" spellcheck="false" placeholder="No one shall know" formControlName="notificationSettings">-->
+            <!--                <span class="tooltip-content">-->
+            <!--                    The password cannot be empty.-->
+            <!--                </span>-->
+            <!--            </label>-->
+            <!--        </div>-->
+            <!--        <button class="btn btn-primary" type="submit"-->
+            <!--            [disabled]="notificationSettings.invalid">{{notificationButton}}</button>-->
+            <!--    </section>-->
+            <!--</form>-->
         </div>
     </div>
 
