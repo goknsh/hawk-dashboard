@@ -29,7 +29,7 @@ export class LoginComponent implements OnInit {
   errorMsg = "No errors recieved."; errorDisplay = "inactive"; loginstatus = "Login"; signupDisplay = false; sub; version; userStatus = JSON.parse(localStorage.getItem("currentUser"));
   
   ngOnInit() {
-    document.title = "Login - Ping by hype.";
+    document.title = "Login - Hawk";
     if (localStorage.getItem("currentUser") !== null) {
       if (new Date().getTime() >= this.userStatus["expires"]) {
         localStorage.clear();

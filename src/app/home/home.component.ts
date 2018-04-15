@@ -10,7 +10,7 @@ export class HomeComponent implements OnInit {
   constructor(private router: Router) { }
 
   ngOnInit() {
-    document.title = "Home - Ping by hype.";
+    document.title = "Hawk - a free uptime monitor";
     if (localStorage.getItem("currentUser") !== null) {
       this.router.navigate(["/dashboard", "overview"]);
     }

@@ -10,7 +10,7 @@ export class PrivacyComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
-    document.title = "Privacy - Ping by hype.";
+    document.title = "Privacy Policy - Hawk";
   }
 
 }

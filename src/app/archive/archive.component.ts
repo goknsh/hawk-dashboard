@@ -10,6 +10,7 @@ export class ArchiveComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
+    document.title = "Archives - Hawk";
   }
 
 }

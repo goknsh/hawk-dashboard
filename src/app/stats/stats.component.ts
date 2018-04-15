@@ -10,7 +10,7 @@ export class StatsComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
-    document.title = "Stats for Ping - Ping by hype.";
+    document.title = "Stats for Hawk - Hawk";
   }
 
 }

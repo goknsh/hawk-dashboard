@@ -10,7 +10,7 @@ export class SponsorComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
-    document.title = "Sponsor us - Ping by hype.";
+    document.title = "Sponsor us - Hawk";
   }
 
 }

@@ -29,7 +29,7 @@ export class SignupComponent implements OnInit {
   serverNum;
   
   ngOnInit() {
-    document.title = "Sign up - Ping by hype.";
+    document.title = "Sign up - Hawk";
     if (localStorage.getItem("currentUser") !== null) {
       this.router.navigate(["/dashboard"]);
     } if (new Date().getDate() < 15) {

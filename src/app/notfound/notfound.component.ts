@@ -13,6 +13,7 @@ export class NotfoundComponent implements OnInit {
   ) { }
   currentURL;
   ngOnInit() {
+    document.title = "404; Not Found - Hawk";
     this.currentURL = this.router.url;
   }
 

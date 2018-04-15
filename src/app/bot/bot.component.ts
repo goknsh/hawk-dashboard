@@ -10,6 +10,7 @@ export class BotComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
+    document.title = "About our Bot - Hawk";
   }
 
 }

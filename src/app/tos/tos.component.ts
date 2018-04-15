@@ -10,7 +10,7 @@ export class TosComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
-    document.title = "Terms of Service - Ping by hype.";
+    document.title = "Terms of Service - Hawk";
   }
 
 }

@@ -1,7 +1,7 @@
 <div class="login-wrapper">
     <form [formGroup]="login" [hidden]="signupDisplay" (ngSubmit)="loginUser(login.value)" class="login">
         <label class="title">
-            Login to Ping
+            Login to Hawk
             <h5 class="hint">Use your email and password to sign in or create an account now</h5>
         </label>
         <div class="login-group">
@@ -14,7 +14,7 @@
                         [class.invalid]="login.get('email').invalid
                             && (login.get('email').dirty ||
                             login.get('email').touched)">
-                    <input id="email" spellcheck="false" type="email" placeholder="jason@usehype.ga" formControlName="email">
+                    <input id="email" spellcheck="false" type="email" placeholder="jason@usehawk.ga" formControlName="email">
                     <span class="tooltip-content">
                         The field is empty or the email is invalid.
                     </span>

@@ -160,7 +160,7 @@ Click to view more stats" class="btn btn-sm btn-link">more <clr-icon shape="arro
                     </div>
                     <div class="card-block">
                         <div class="card-text">
-                            Thanks for using Ping! We’d really appreciate it if you could donate to hype <a class="plain" href="https://paypal.me/akaankshraj/5" target="_blank">via PayPal</a> or <a class="plain" href="https://www.buymeacoffee.com/ark">buy me a coffee</a> (to keep things free), share it with others and <a class="plain" href="https://usehype.ga/" target="_blank">checkout our other products</a>.<br><a href="/stats" routerLink="/stats">View Ping’s statistics</a>
+                            Thanks for using Hawk! We’d really appreciate it if you could donate: <a class="plain" href="https://paypal.me/akaankshraj/5" target="_blank">via PayPal</a> or <a class="plain" href="https://www.buymeacoffee.com/ark">buy me a coffee</a> which will help keep things free, also, please share it with others and <a class="plain" href="https://akaanksh.ga/" target="_blank">checkout my website</a>.<br><a href="/stats" routerLink="/stats">View Hawk’s statistics</a>
                         </div>
                     </div>
                     <div class="card-footer">
@@ -175,7 +175,7 @@ Click to view more stats" class="btn btn-sm btn-link">more <clr-icon shape="arro
         <div class="hero-outer">
             <div class="hero">
                 <h1>404; not found</h1>
-                <p>We didn&rsquo;t find &ldquo;{{ currentURL }}&rdquo; our servers. Sorry. Check if the URL you entered is correct and has no typos. If you know there is supposed to be something here, please email <a href="mailto:contact@useping.ga">contact@useping.ga</a></p>
+                <p>We didn&rsquo;t find &ldquo;{{ currentURL }}&rdquo; our servers. Sorry. Check if the URL you entered is correct and has no typos. If you know there is supposed to be something here, please email <a href="mailto:contact@usehawk.ga">contact@usehawk.ga</a></p>
                 <div class="btn-group">
                     <a href="/dashboard/add" routerLink="/dashboard/add" class="btn">Add website</a>
                     <a href="/dashboard/overview" routerLink="/dashboard/overview" class="btn btn-primary">Dashboard &rarr;</a>
@@ -626,7 +626,7 @@ Click to view more stats" class="btn btn-sm btn-link">more <clr-icon shape="arro
             <form [formGroup]="addWebsite" (ngSubmit)="addWebsiteToDB(addWebsite.value)" class="login">
                 <label class="title">
                     Add new website
-                    <h5 class="hint">Add a new website that Ping can monitor</h5>
+                    <h5 class="hint">Add a new website that Hawk can monitor</h5>
                 </label>
                 <div class="login-group">
                     <div class="form-group">
@@ -638,7 +638,7 @@ Click to view more stats" class="btn btn-sm btn-link">more <clr-icon shape="arro
                                 [class.invalid]="addWebsite.get('url').invalid
                                     && (addWebsite.get('url').dirty ||
                                     addWebsite.get('url').touched)">
-                            <input id="url" spellcheck="false" type="url" placeholder="https://useping.ga/" formControlName="url">
+                            <input id="url" spellcheck="false" type="url" placeholder="https://usehawk.ga/" formControlName="url">
                             <span class="tooltip-content">
                                 The field is empty or the URL is invalid.
                             </span>
@@ -654,7 +654,7 @@ Click to view more stats" class="btn btn-sm btn-link">more <clr-icon shape="arro
                                 [class.invalid]="addWebsite.get('title').invalid
                                     && (addWebsite.get('title').dirty ||
                                     addWebsite.get('title').touched)">
-                            <input id="title" type="text" placeholder="Ping" formControlName="title">
+                            <input id="title" type="text" placeholder="Hawk" formControlName="title">
                             <span class="tooltip-content">
                                 A title for your website is required.
                             </span>

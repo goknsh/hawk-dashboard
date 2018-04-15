@@ -34,7 +34,7 @@ export class DashboardComponent implements OnInit {
   moreName; moreNameRegex: any; usLatencyChart = new Array(); usLookupChart = new Array(); ieLatencyChart = new Array(); ieLookupChart = new Array(); usSpeedForCharts = new Array(); ieSpeedForCharts = new Array(); timesForLatency = new Array(); timesForLookup = new Array(); timesForLog = new Array(); outages = new Array();
 
   ngOnInit() {
-    document.title = "Dashboard - Ping by hype.";
+    document.title = "Dashboard - Hawk";
     window.onbeforeunload = function(e) {
       sessionStorage.clear();
     };
@@ -133,7 +133,7 @@ export class DashboardComponent implements OnInit {
         } else {
           if (this.data.length === 0) {
             this.dashboardStatus = "No websites added.";
-            this.dashboardSub = "Looks like you don’t have Ping monitoring any of you websites. Go ahead and add one.";
+            this.dashboardSub = "Looks like you don’t have Hawk monitoring any of you websites. Go ahead and add one.";
           } else {
             this.reqData = data; this.localTimes = []; this.sslTimes = []; this.sslTimes["us"] = []; this.sslTimes["ie"] = [];
             let i = 0; let notOk = 0;

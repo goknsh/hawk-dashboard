@@ -9,7 +9,7 @@ import { Router } from '@angular/router';
 export class AppComponent implements OnInit {
     name = "Dashboard";
     ngOnInit() {
-        document.title = "Dashboard - Ping by hype.";
+        document.title = "Dashboard - Ping";
         if (localStorage.getItem("currentUser") === null) {
             this.name = "Dashboard";
         } else {
