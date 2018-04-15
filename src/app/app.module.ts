@@ -18,6 +18,8 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 import { LogoutComponent } from './logout/logout.component';
 import { NotfoundComponent } from './notfound/notfound.component';
 import { StatsComponent } from './stats/stats.component';
+import { ArchiveComponent } from './archive/archive.component';
+import { BotComponent } from './bot/bot.component';
 
 @NgModule({
     declarations: [
@@ -31,7 +33,9 @@ import { StatsComponent } from './stats/stats.component';
         DashboardComponent,
         LogoutComponent,
         NotfoundComponent,
-        StatsComponent
+        StatsComponent,
+        ArchiveComponent,
+        BotComponent
     ],
     imports: [
         BrowserAnimationsModule,

@@ -24,6 +24,88 @@
         </clr-alert>
     </div>
 
+    <div class="account" [hidden]="!accountDisplay">
+        <div class="hero-outer">
+            <div class="hero">
+                <h1>Account Settings - Soon</h1>
+                <p>Manage your password, email and notification settings</p>
+            </div>
+        </div>
+        <div class="content">
+            <form class="form" [formGroup]="emailChange" (ngSubmit)="emailChangeTo(emailChange.value)">
+                <section class="form-block">
+                    <label class="main">Change Email</label>
+                    <div class="form-group">
+                        <label for="currentEmail">Current Email</label>
+                        <input type="text" value="{{this.userData.email}}" disabled>
+                    </div>
+                    <div class="form-group">
+                        <label for="changeEmailTo">Change Email to</label>
+                        <label for="changeEmailTo"
+                            aria-haspopup="true"
+                            role="tooltip"
+                            class="tooltip tooltip-validation tooltip-sm"
+                            [class.invalid]="emailChange.get('emailChangeToThis').invalid
+                                && (emailChange.get('emailChangeToThis').dirty || emailChange.get('emailChangeToThis').touched)">
+                            <input type="email" spellcheck="false" formControlName="emailChangeToThis">
+                            <span class="tooltip-content">
+                                Change Email to must be valid, cannot be empty or may not be your previous email. 
+                            </span>
+                        </label>
+                    </div>
+                    <button class="btn btn-primary" type="submit"
+                        [disabled]="emailChange.invalid">{{emailControlButton}}</button>
+                </section>
+            </form>
+            <form class="form" [formGroup]="passwordChange" (ngSubmit)="passwordChangeTo(passwordChange.value)">
+                <section class="form-block">
+                    <label class="main">Change Password</label>
+                    <div class="form-group">
+                        <label for="currentPassword">Current Password</label>
+                        <input type="password" placeholder="Soon to be changed">
+                    </div>
+                    <div class="form-group">
+                        <label for="newPassword">New Password</label>
+                        <label for="newPassword"
+                            aria-haspopup="true"
+                            role="tooltip"
+                            class="tooltip tooltip-validation tooltip-sm"
+                            [class.invalid]="passwordChange.get('passwordChangeToThis').invalid
+                                && (passwordChange.get('passwordChangeToThis').dirty || passwordChange.get('passwordChangeToThis').touched)">
+                            <input type="password" spellcheck="false" placeholder="No one shall know" formControlName="passwordChange">
+                            <span class="tooltip-content">
+                                The password cannot be empty.
+                            </span>
+                        </label>
+                    </div>
+                    <button class="btn btn-primary" type="submit"
+                        [disabled]="passwordChange.invalid">{{passwordChangeButton}}</button>
+                </section>
+            </form>
+            <form class="form" [formGroup]="notificationSettings" (ngSubmit)="notificationSettingsChange(notificationSettings.value)">
+                <section class="form-block">
+                    <label class="main">Notification Settings</label>
+                    <div class="form-group">
+                        <label for="newPassword">New Password</label>
+                        <label for="newPassword"
+                            aria-haspopup="true"
+                            role="tooltip"
+                            class="tooltip tooltip-validation tooltip-sm"
+                            [class.invalid]="notificationSettings.get('passwordChangeToThis').invalid
+                                && (notificationSettings.get('passwordChangeToThis').dirty || notificationSettings.get('passwordChangeToThis').touched)">
+                            <input type="password" spellcheck="false" placeholder="No one shall know" formControlName="notificationSettings">
+                            <span class="tooltip-content">
+                                The password cannot be empty.
+                            </span>
+                        </label>
+                    </div>
+                    <button class="btn btn-primary" type="submit"
+                        [disabled]="notificationSettings.invalid">{{notificationButton}}</button>
+                </section>
+            </form>
+        </div>
+    </div>
+
     <div class="overview" [hidden]="!overviewDisplay">
         <div class="hero-outer {{dashboardClass}}">
             <div class="hero">
@@ -35,39 +117,53 @@
         <h1>Websites</h1>
         <div class="row feature-cards">
             <div class="col-lg-4 col-md-8 col-sm-12 col-xs-12" *ngFor="let item of reqData; let i = index" [attr.data-index]="i">
-                <div class="card clickable {{item[0]['data']['us-status']}}" routerLink="/dashboard/{{item['id']}}">
+                <div class="card {{item[0]['data']['us-status']}} {{item[0]['data']['ie-status']}}">
                     <div class="card-header">
-                        <h3 title="URL: {{ item['site'] }}"><input value="{{ item['name'] }}" readonly></h3>
+                        <a routerLink="/dashboard/{{item['id']}}" title="URL: {{ item['site'] }} 
+Click to view more stats"><input value="{{ item['name'] }}" readonly></a>
                     </div>
                     <div class="card-block">
-                        <!--<div class="card-title">-->
-                        <!--</div>-->
                         <div class="card-text">
-                            US Status: {{ item[0]["data"]["us-status"] }}; {{ item[0]["data"]["us-code"] }}<br> Uptime: Soon<br> Apdex: Soon<br> US Latency: {{ item[0]["data"]["us-ping"] }}ms<br> SSL Expiry: {{ sslTimes[i] }}
+                            <div class="pc-tab">
+                                <input checked="checked" class="tab1" id="{{ item['id'] }}1" type="radio" name="{{ item['id'] }}">
+                                <input class="tab2" id="{{ item['id'] }}2" type="radio" name="{{ item['id'] }}">
+                                <nav>
+                                    <ul>
+                                        <label for="{{ item['id'] }}1">
+                                            <li class="tab1 {{item[0]['data']['us-status']}}" title="Data from: United States">US</li>
+                                        </label>
+                                        <label for="{{ item['id'] }}2">
+                                            <li class="tab2 {{item[0]['data']['ie-status']}}" title="Data from: Ireland">IE</li>
+                                        </label>
+                                    </ul>
+                                </nav>
+                                
+                                <section>
+                                    <div class="tab1">Status: {{ item[0]["data"]["us-status"] }}; {{ item[0]["data"]["us-code"] }}<br>Uptime: {{ item['us-uptime'] }}%<br>Apdex: Soon<br>Latency: {{ item[0]["data"]["us-latency"] }}ms @ {{ item[0]["data"]["us-speed"] }}mbps<br>SSL Expiry: {{ sslTimes['us'][i] }}</div>
+                                    <div class="tab2">Status: {{ item[0]["data"]["ie-status"] }}; {{ item[0]["data"]["ie-code"] }}<br>Uptime: {{ item['ie-uptime'] }}%<br>Apdex: Soon<br>Latency: {{ item[0]["data"]["ie-latency"] }}ms @ {{ item[0]["data"]["ie-speed"] }}mbps<br>SSL Expiry: {{ sslTimes['ie'][i] }}</div>
+                                </section>
+                            </div>
                         </div>
                     </div>
                     <div class="card-footer">
-                        <button title="Check number" class="btn btn-sm btn-link">#{{ item[0]["data"]["id"] }}</button>
-                        <button title="Time of last check" class="btn btn-sm btn-link">{{ localTimes[i] }}</button>
+                        <a title="Check number & time of check" class="btn btn-sm btn-link">#{{ item[0]["data"]["id"] }} - {{ localTimes[i] }}</a>
+                        <a routerLink="/dashboard/{{item['id']}}" title="URL: {{ item['site'] }} 
+Click to view more stats" class="btn btn-sm btn-link">more <clr-icon shape="arrow right" style="width:14px;height:14px;"></clr-icon></a>
                     </div>
                 </div>
             </div>
-            <div class="col-lg-4 col-md-8 col-sm-12 col-xs-12">
+            <div class="col-lg-4 col-md-8 col-sm-12 col-xs-12 addSite">
                 <div class="card clickable">
                     <div class="card-header">
-                        <h3><a href="/dashboard/add" routerLink="/dashboard/add">Add a site &rarr;</a></h3>
+                        <a href="/dashboard/add" routerLink="/dashboard/add">Add a site <clr-icon shape="arrow right" style="width:24px;height:24px;"></clr-icon></a>
                     </div>
                     <div class="card-block">
-                        <!--<div class="card-title">-->
-                        <!--</div>-->
                         <div class="card-text">
                             Thanks for using Ping! We’d really appreciate it if you could donate to hype <a class="plain" href="https://paypal.me/akaankshraj/5" target="_blank">via PayPal</a> or <a class="plain" href="https://www.buymeacoffee.com/ark">buy me a coffee</a> (to keep things free), share it with others and <a class="plain" href="https://usehype.ga/" target="_blank">checkout our other products</a>.<br><a href="/stats" routerLink="/stats">View Ping’s statistics</a>
                         </div>
                     </div>
                     <div class="card-footer">
                         <button title="Current Version" class="btn btn-sm btn-link">v0.5.0-ng</button>
-                        <button title="Click to go to an alternate Version" href="https://api.useping.ga/" class="btn btn-sm btn-link">v0.5.0-php</button>
-                        <button class="btn btn-sm btn-link">Made by akaanksh.</button>
                     </div>
                 </div>
             </div>
@@ -80,8 +176,8 @@
                 <h1>404; not found</h1>
                 <p>We didn&rsquo;t find &ldquo;{{ currentURL }}&rdquo; our servers. Sorry. Check if the URL you entered is correct and has no typos. If you know there is supposed to be something here, please email <a href="mailto:contact@useping.ga">contact@useping.ga</a></p>
                 <div class="btn-group">
-                    <button routerLink="/login/new" class="btn">Log in</button>
-                    <button routerLink="/dashboard/overview" class="btn btn-primary">Dashboard &rarr;</button>
+                    <a href="/dashboard/add" routerLink="/dashboard/add" class="btn">Add website</a>
+                    <a href="/dashboard/overview" routerLink="/dashboard/overview" class="btn btn-primary">Dashboard &rarr;</a>
                 </div>
             </div>
         </div>
@@ -90,7 +186,7 @@
     <div class="more" [hidden]="!moreDisplay">
         <header class="header-7">
             <div class="branding">
-                <a href="#" routerLink="/dashboard/overview" class="nav-link">
+                <a href="/dashboard/overview" routerLink="/dashboard/overview" class="nav-link">
                     <clr-icon shape="arrow" size="18" dir="left" style="color: #fafafa"></clr-icon>
                     <span class="title">Back to Dashboard</span>
                 </a>
@@ -110,6 +206,7 @@
                 <input checked="checked" id="tab1" type="radio" name="pct">
                 <input id="tab2" type="radio" name="pct">
                 <input id="tab3" type="radio" name="pct">
+                <input id="tab4" type="radio" name="pct">
 
                 <nav>
                     <ul>
@@ -122,12 +219,98 @@
                         <label for="tab3">
                             <li class="tab3">Logs</li>
                         </label>
+                        <label for="tab4">
+                            <li class="tab4">Settings</li>
+                        </label>
                     </ul>
                 </nav>
                 
                 <section>
                     <div class="tab1">
                         <h2>Overview</h2>
+                        <h3>General</h3>
+                        <div class="row feature-cards">
+                            <div class="col-lg-4 col-md-8 col-sm-12 col-xs-12">
+                                <div class="card">
+                                    <div class="card-block">
+                                        <div class="card-title">
+                                            <h3>US: {{ usUptime }}%</h3>
+                                            <h3>IE: {{ ieUptime }}%</h3>
+                                        </div>
+                                        <div class="card-text">
+                                            Uptime (All time)
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-4 col-md-8 col-sm-12 col-xs-12">
+                                <div class="card">
+                                    <div class="card-block">
+                                        <div class="card-title">
+                                            <h3>US: {{ usUptimeWk }}%</h3>
+                                            <h3>IE: {{ ieUptimeWk }}%</h3>
+                                        </div>
+                                        <div class="card-text">
+                                            This Week&rsquo;s Uptime
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-4 col-md-8 col-sm-12 col-xs-12">
+                                <div class="card">
+                                    <div class="card-block">
+                                        <div class="card-title">
+                                            <h3>US: {{ usUptimeMn }}%</h3>
+                                            <h3>IE: {{ ieUptimeMn }}%</h3>
+                                        </div>
+                                        <div class="card-text">
+                                            This Month&rsquo;s Uptime
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="col-lg-4 col-md-8 col-sm-12 col-xs-12">
+                                <div class="card">
+                                    <div class="card-block">
+                                        <div class="card-title">
+                                            <h3>US: {{ usLatency }}ms</h3>
+                                            <h3>IE: {{ ieLatency }}ms</h3>
+                                        </div>
+                                        <div class="card-text">
+                                            Average Latency
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-4 col-md-8 col-sm-12 col-xs-12">
+                                <div class="card">
+                                    <div class="card-block">
+                                        <div class="card-title">
+                                            <h3>US: {{ usLookup }}ms</h3>
+                                            <h3>IE: {{ ieLookup }}ms</h3>
+                                        </div>
+                                        <div class="card-text">
+                                            Average Nameserver Lookup Latency
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-4 col-md-8 col-sm-12 col-xs-12">
+                                <div class="card">
+                                    <div class="card-block">
+                                        <div class="card-title">
+                                            <h3>US: {{ usSpeed }}mbps</h3>
+                                            <h3>IE: {{ ieSpeed }}mbps</h3>
+                                        </div>
+                                        <div class="card-text">
+                                            Average Download Speed
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
                         <div [hidden]="!latencyLineChartJS">
                             <canvas id="latencyLineChart">{{ latencyLineChartJS }}</canvas>
                         </div>
@@ -135,7 +318,7 @@
                             <canvas id="lookupLineChart">{{ lookupLineChartJS }}</canvas>
                         </div>
                         <h3>United States</h3>
-                        <div class="row feature-cards" *ngFor="let item of reqMoreDataForOverview">
+                        <div class="row feature-cards" *ngFor="let item of reqMoreDataForOverview; let i = index" [attr.data-index]="i">
                             <div class="col-lg-3 col-md-8 col-sm-12 col-xs-12">
                                 <div class="card">
                                     <div class="card-block">
@@ -164,7 +347,7 @@
                                 <div class="card">
                                     <div class="card-block">
                                         <div class="card-title">
-                                            <h3>{{ item['us-ssl-authority'] }}</h3>
+                                            <h3>{{ sslMoreAuth[i] }}</h3>
                                         </div>
                                         <div class="card-text">
                                             SSL Authority
@@ -176,7 +359,58 @@
                                 <div class="card">
                                     <div class="card-block">
                                         <div class="card-title">
-                                            <h3>{{ item['us-ssl-expiry'] }}</h3>
+                                            <h3>{{ sslMoreExp[i] }}</h3>
+                                        </div>
+                                        <div class="card-text">
+                                            SSL Expiry Date
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <h3>Ireland</h3>
+                        <div class="row feature-cards" *ngFor="let item of reqMoreDataForOverview; let i = index" [attr.data-index]="i">
+                            <div class="col-lg-3 col-md-8 col-sm-12 col-xs-12">
+                                <div class="card">
+                                    <div class="card-block">
+                                        <div class="card-title">
+                                            <h3>{{ item["ie-status"] }}</h3>
+                                        </div>
+                                        <div class="card-text">
+                                            Status
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-md-8 col-sm-12 col-xs-12">
+                                <div class="card">
+                                    <div class="card-block">
+                                        <div class="card-title">
+                                            <h3>{{ item["ie-data"] }} bytes</h3>
+                                        </div>
+                                        <div class="card-text">
+                                            Data Downloaded
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-md-8 col-sm-12 col-xs-12">
+                                <div class="card">
+                                    <div class="card-block">
+                                        <div class="card-title">
+                                            <h3>{{ sslMoreAuth[i+1] }}</h3>
+                                        </div>
+                                        <div class="card-text">
+                                            SSL Authority
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-md-8 col-sm-12 col-xs-12">
+                                <div class="card">
+                                    <div class="card-block">
+                                        <div class="card-title">
+                                            <h3>{{ sslMoreExp[i+1] }}</h3>
                                         </div>
                                         <div class="card-text">
                                             SSL Expiry Date
@@ -192,20 +426,32 @@
                             <clr-dg-placeholder>No outages!</clr-dg-placeholder>
                             <clr-dg-column>Time</clr-dg-column>
                             <clr-dg-column>
-                                <ng-container *clrDgHideableColumn>Code (US / EU / IN)</ng-container>
+                                <ng-container *clrDgHideableColumn>Code (US / IE)</ng-container>
                             </clr-dg-column>
                             <clr-dg-column>
-                                <ng-container *clrDgHideableColumn>Status (US / EU / IN)</ng-container>
+                                <ng-container *clrDgHideableColumn>Status (US / IE)</ng-container>
                             </clr-dg-column>
                             <clr-dg-column>
-                                <ng-container *clrDgHideableColumn>Latency (US / EU / IN)</ng-container>
+                                <ng-container *clrDgHideableColumn>Latency (US / IE)</ng-container>
+                            </clr-dg-column>
+                            <clr-dg-column>
+                                <ng-container *clrDgHideableColumn>Speed (US / IE)</ng-container>
+                            </clr-dg-column>
+                            <clr-dg-column>
+                                <ng-container *clrDgHideableColumn="{hidden: true}">Nameserver Lookup (US / IE)</ng-container>
+                            </clr-dg-column>
+                            <clr-dg-column>
+                                <ng-container *clrDgHideableColumn="{hidden: true}">Data Downloaded (US / IE)</ng-container>
                             </clr-dg-column>
     
                             <clr-dg-row *clrDgItems="let item of outages">
                                 <clr-dg-cell>{{timesForLog[item]}}</clr-dg-cell>
-                                <clr-dg-cell>{{reqMoreData[item][0]["us-code"]}} / {{reqMoreData[item][0]["uk-code"]}} / {{reqMoreData[item][0]["in-code"]}}</clr-dg-cell>
-                                <clr-dg-cell>{{reqMoreData[item][0]["us-status"]}} / {{reqMoreData[item][0]["uk-status"]}} / {{reqMoreData[item][0]["in-status"]}}</clr-dg-cell>
-                                <clr-dg-cell>{{reqMoreData[item][0]["us-ping"]}}ms / {{reqMoreData[item][0]["uk-ping"]}}ms / {{reqMoreData[item][0]["in-ping"]}}ms</clr-dg-cell>
+                                <clr-dg-cell>{{reqMoreData[item][0]["us-code"]}} / {{reqMoreData[item][0]["ie-code"]}}</clr-dg-cell>
+                                <clr-dg-cell>{{reqMoreData[item][0]["us-status"]}} / {{reqMoreData[item][0]["ie-status"]}}</clr-dg-cell>
+                                <clr-dg-cell>{{reqMoreData[item][0]["us-latency"]}}ms / {{reqMoreData[item][0]["ie-latency"]}}ms</clr-dg-cell>
+                                <clr-dg-cell>{{reqMoreData[item][0]["us-speed"]}}mbps / {{reqMoreData[item][0]["ie-speed"]}}mbps</clr-dg-cell>
+                                <clr-dg-cell>{{reqMoreData[item][0]["us-lookup"]}}ms / {{reqMoreData[item][0]["ie-lookup"]}}ms</clr-dg-cell>
+                                <clr-dg-cell>{{reqMoreData[item][0]["us-data"]}} / {{reqMoreData[item][0]["ie-data"]}}</clr-dg-cell>
                             </clr-dg-row>
     
                             <clr-dg-footer>
@@ -228,37 +474,32 @@
                             <clr-dg-placeholder>We&rsquo;re sorting the data.</clr-dg-placeholder>
                             <clr-dg-column>Time</clr-dg-column>
                             <clr-dg-column>
-                                <ng-container *clrDgHideableColumn>Code (US / EU / IN)</ng-container>
+                                <ng-container *clrDgHideableColumn>Code (US / IE)</ng-container>
                             </clr-dg-column>
                             <clr-dg-column>
-                                <ng-container *clrDgHideableColumn>Status (US / EU / IN)</ng-container>
+                                <ng-container *clrDgHideableColumn>Status (US / IE)</ng-container>
                             </clr-dg-column>
                             <clr-dg-column>
-                                <ng-container *clrDgHideableColumn>Latency (US / EU / IN)</ng-container>
+                                <ng-container *clrDgHideableColumn>Latency (US / IE)</ng-container>
                             </clr-dg-column>
                             <clr-dg-column>
-                                <ng-container *clrDgHideableColumn="{hidden: true}">Nameserver Lookup (US / EU / IN)</ng-container>
+                                <ng-container *clrDgHideableColumn>Speed (US / IE)</ng-container>
                             </clr-dg-column>
                             <clr-dg-column>
-                                <ng-container *clrDgHideableColumn="{hidden: true}">SSL Authority (US / EU / IN)</ng-container>
+                                <ng-container *clrDgHideableColumn="{hidden: true}">Nameserver Lookup (US / IE)</ng-container>
                             </clr-dg-column>
                             <clr-dg-column>
-                                <ng-container *clrDgHideableColumn="{hidden: true}">SSL Expiry (US / EU / IN)</ng-container>
-                            </clr-dg-column>
-                            
-                            <clr-dg-column>
-                                <ng-container *clrDgHideableColumn="{hidden: true}">Data Downloaded (US / EU / IN)</ng-container>
+                                <ng-container *clrDgHideableColumn="{hidden: true}">Data Downloaded (US / IE)</ng-container>
                             </clr-dg-column>
     
                             <clr-dg-row *clrDgItems="let item of reqMoreData; let i = index" [attr.data-index]="i">
                                 <clr-dg-cell>{{timesForLog[i]}}</clr-dg-cell>
-                                <clr-dg-cell>{{item[0]["us-code"]}} / {{item[0]["uk-code"]}} / {{item[0]["in-code"]}}</clr-dg-cell>
-                                <clr-dg-cell>{{item[0]["us-status"]}} / {{item[0]["uk-status"]}} / {{item[0]["in-status"]}}</clr-dg-cell>
-                                <clr-dg-cell>{{item[0]["us-ping"]}}ms / {{item[0]["uk-ping"]}}ms / {{item[0]["in-ping"]}}ms</clr-dg-cell>
-                                <clr-dg-cell>{{item[0]["us-lookup"]}}ms / {{item[0]["uk-lookup"]}}ms / {{item[0]["in-lookup"]}}ms</clr-dg-cell>
-                                <clr-dg-cell>{{item[0]["us-ssl-authority"]}} / {{item[0]["uk-ssl-authority"]}} / {{item[0]["in-ssl-authority"]}}</clr-dg-cell>
-                                <clr-dg-cell>{{item[0]["us-ssl-expiry"]}} / {{item[0]["uk-ssl-expiry"]}} / {{item[0]["in-ssl-expiry"]}}</clr-dg-cell>
-                                <clr-dg-cell>{{item[0]["us-data"]}} / {{item[0]["uk-data"]}} / {{item[0]["in-data"]}}</clr-dg-cell>
+                                <clr-dg-cell>{{item[0]["us-code"]}} / {{item[0]["ie-code"]}}</clr-dg-cell>
+                                <clr-dg-cell>{{item[0]["us-status"]}} / {{item[0]["ie-status"]}}</clr-dg-cell>
+                                <clr-dg-cell>{{item[0]["us-latency"]}}ms / {{item[0]["ie-latency"]}}ms</clr-dg-cell>
+                                <clr-dg-cell>{{item[0]["us-speed"]}}mbps / {{item[0]["ie-speed"]}}mbps</clr-dg-cell>
+                                <clr-dg-cell>{{item[0]["us-lookup"]}}ms / {{item[0]["ie-lookup"]}}ms</clr-dg-cell>
+                                <clr-dg-cell>{{item[0]["us-data"]}} / {{item[0]["ie-data"]}}</clr-dg-cell>
                             </clr-dg-row>
     
                             <clr-dg-footer>
@@ -275,6 +516,105 @@
                             </clr-dg-footer>
                         </clr-datagrid>
                     </div>
+                    <div class="tab4">
+                        <h2>Settings</h2>
+                        <form class="form">
+                            <section class="form-block">
+                                <label class="main">Website URL</label>
+                                <div class="form-group">
+                                    <label for="currentURL">Current URL</label>
+                                    <label for="currentURL">
+                                        <input id="currentURL" type="text" value="{{siteURLMore}}" disabled>
+                                    </label>
+                                </div>
+                                <a class="btn btn-primary" href="{{siteURLMore}}" target="_blank">Visit Website</a>
+                            </section>
+                        </form>
+                        <form class="form" [formGroup]="changeLatency" (ngSubmit)="changeLatencyTo(changeLatency.value)">
+                            <section class="form-block">
+                                <label class="main">Latency Threshold</label>
+                                <div class="form-group">
+                                    <label for="currentLatency">Current Latency</label>
+                                    <label for="currentLatency">
+                                        <input id="currentLatency" type="text" value="{{currentLatencyMore}}ms" disabled>
+                                    </label>
+                                </div>
+                                <div class="form-group">
+                                    <label for="changeLatencyTo">Change Latency to</label>
+                                    <label for="changeLatencyTo"
+                                        aria-haspopup="true"
+                                        role="tooltip"
+                                        class="tooltip tooltip-validation tooltip-sm"
+                                        [class.invalid]="changeLatency.get('changeLatencyTo').invalid
+                                            && (changeLatency.get('changeLatencyTo').dirty ||
+                                            changeLatency.get('changeLatencyTo').touched)">
+                                        <input id="changeLatencyTo" type="number" ng-pattern="^[0-9]*$" placeholder="1000ms = 1s"
+                                            formControlName="changeLatencyTo">
+                                        <span class="tooltip-content">
+                                            Change Latency to is required, and must be a number
+                                        </span>
+                                    </label>
+                                </div>
+                                <button class="btn btn-primary"
+                                    type="submit"
+                                    [disabled]="changeLatency.invalid">{{changeLatencyButton}}</button>
+                            </section>
+                        </form>
+                        <form class="form" [formGroup]="changeWebsiteName" (ngSubmit)="changeWebsiteNameTo(changeWebsiteName.value)">
+                            <section class="form-block">
+                                <label class="main">Website Name</label>
+                                <div class="form-group">
+                                    <label for="changeWebsiteName">Current Name</label>
+                                    <label for="changeWebsiteName">
+                                        <input id="changeWebsiteName" type="text" value="{{moreName}}" disabled>
+                                    </label>
+                                </div>
+                                <div class="form-group">
+                                    <label for="changeWebsiteNameTo">Change Name to</label>
+                                    <label for="changeWebsiteNameTo"
+                                        aria-haspopup="true"
+                                        role="tooltip"
+                                        class="tooltip tooltip-validation tooltip-sm"
+                                        [class.invalid]="changeWebsiteName.get('changeWebsiteNameTo').invalid
+                                            && (changeWebsiteName.get('changeWebsiteNameTo').dirty ||
+                                            changeWebsiteName.get('changeWebsiteNameTo').touched)">
+                                        <input id="changeWebsiteNameTo" type="text" placeholder="New Name"
+                                            formControlName="changeWebsiteNameTo">
+                                        <span class="tooltip-content">
+                                            Change Name to is required
+                                        </span>
+                                    </label>
+                                </div>
+                                <button class="btn btn-primary"
+                                    type="submit"
+                                    [disabled]="changeWebsiteName.invalid">{{changeWebsiteButton}}</button>
+                            </section>
+                        </form>
+                        <form class="form" [formGroup]="deleteWebsite" (ngSubmit)="deleteWebsiteSubmit(deleteWebsite.value)">
+                            <section class="form-block">
+                                <label class="main">Delete Check</label>
+                                <div class="form-group">
+                                    <label for="confirm">Website&rsquo;s name</label>
+                                    <label for="confirm"
+                                        aria-haspopup="true"
+                                        role="tooltip"
+                                        class="tooltip tooltip-validation tooltip-sm"
+                                        [class.invalid]="deleteWebsite.get('confirm').invalid
+                                            && (deleteWebsite.get('confirm').dirty ||
+                                            deleteWebsite.get('confirm').touched)">
+                                        <input id="confirm" type="text" pattern="{{moreNameRegex}}" placeholder="Confirm deletion"
+                                            formControlName="confirm">
+                                        <span class="tooltip-content">
+                                            What you type in must match the website&rsquo;s name
+                                        </span>
+                                    </label>
+                                </div>
+                                <button class="btn btn-primary"
+                                    type="submit"
+                                    [disabled]="deleteWebsite.invalid">{{deleteButton}}</button>
+                            </section>
+                        </form>
+                    </div>
                 </section>
             </div>
         </div>
@@ -285,6 +625,7 @@
             <form [formGroup]="addWebsite" (ngSubmit)="addWebsiteToDB(addWebsite.value)" class="login">
                 <label class="title">
                     Add new website
+                    <h5 class="hint">Add a new website that Ping can monitor</h5>
                 </label>
                 <div class="login-group">
                     <div class="form-group">
@@ -320,7 +661,7 @@
                     </div>
                     
                     <div class="form-group">
-                        <p>Timeout (ms) @ 0.01mbps</p>
+                        <p>Latency Threshold (ms)</p>
                         <label for="timeout"
                                 aria-haspopup="true"
                                 role="tooltip"
@@ -328,18 +669,22 @@
                                 [class.invalid]="addWebsite.get('timeout').invalid
                                     && (addWebsite.get('timeout').dirty ||
                                     addWebsite.get('timeout').touched)">
-                            <input id="timeout" type="number" placeholder="1000ms = 1s" formControlName="timeout">
+                            <input id="timeout" type="number" ng-pattern="^[0-9]*$" placeholder="1000ms = 1s" formControlName="timeout">
                             <span class="tooltip-content">
                                 Timeout is required.
                             </span>
                         </label>
                     </div>
-                    
-                    <div class="{{errorDisplayAdd}}">
-                        {{ errorMsgAdd }}
-                    </div>
+                    <clr-alert [clrAlertClosable]="false" [hidden]="!addErrorDisplay" [clrAlertType]="addErrorAlertType">
+                        <div class="alert-item">
+                            <span class="alert-text">
+                               {{ errorMsgAdd }}
+                            </span>
+                        </div>
+                    </clr-alert>
                     
                     <button type="submit" [disabled]="addWebsite.invalid" class="btn btn-primary">{{ addWebsiteStatus }}</button>
+                    <a href="/dashboard/overview" routerLink="/dashboard/overview" class="signup" (click)="addWebsite.reset()">Return to Dashboard</a>
                 </div>
             </form>
         </div>

@@ -25,10 +25,8 @@ export class LoginComponent implements OnInit {
     
   }
 
-  errorMsg = "No errors recieved.";
-  errorDisplay = "inactive";
-  sub; version;
-  userStatus = JSON.parse(localStorage.getItem("currentUser"));
+  serverNum;
+  errorMsg = "No errors recieved."; errorDisplay = "inactive"; loginstatus = "Login"; signupDisplay = false; sub; version; userStatus = JSON.parse(localStorage.getItem("currentUser"));
   
   ngOnInit() {
     document.title = "Login - Ping by hype.";
@@ -39,18 +37,31 @@ export class LoginComponent implements OnInit {
       } else {
         this.router.navigate(["/dashboard"]);
       }
+    } if (new Date().getDate() < 15) {
+      this.serverNum = "s1";
+    } else {
+      this.serverNum = "s2";
     }
     this.sub = this.route.params.subscribe(params => {
        this.version = params['id'];
        if (this.version === 'unauthorized') {
+         this.signupDisplay = false;
          this.errorDisplay = "active";
          this.errorMsg = "You don’t have access to that page. Try logging in.";
-       }
-       if (this.version === 'loggedout') {
+       } if (this.version === 'loggedout') {
+         this.signupDisplay = false;
          this.errorDisplay = "active";
          this.errorMsg = "You’ve logged out successfully.";
-       }
-       if (this.version === 'new') {
+       } if (this.version === 'timeout') {
+         this.signupDisplay = false;
+         this.errorDisplay = "active";
+         this.errorMsg = "Your session has timed out, so you’ve been logged out forcefully.";
+       } if (this.version === 'new') {
+         this.signupDisplay = false;
+         this.errorDisplay = "inactive";
+         this.errorMsg = "No errors recieved.";
+       } if (this.version === 'verify') {
+         this.signupDisplay = true;
          this.errorDisplay = "inactive";
          this.errorMsg = "No errors recieved.";
        }
@@ -61,12 +72,10 @@ export class LoginComponent implements OnInit {
     email: new FormControl('', Validators.compose([Validators.required, Validators.email])),
     password: new FormControl('', Validators.required)
   });
-  
-  loginstatus = "Login";
    
   loginUser(credentials) {
     this.loginstatus = "Contacting server...";
-    this.http.get<response>(`https://us.useping.ga/api/v1/new?login=true&email=${credentials.email}&pass=${credentials.password}`).subscribe(
+    this.http.get<response>(`https://main-${this.serverNum}.herokuapp.com/api/v2/?login=true&email=${credentials.email}&pass=${credentials.password}`).subscribe(
       data => {
         if (data.response === "mismatch") {
           this.errorMsg = "Incorrect email or password or account does not exist."
@@ -75,7 +84,7 @@ export class LoginComponent implements OnInit {
         } if (data.response === "success") {
           localStorage.setItem('currentUser', JSON.stringify({ email: data.email, name: data.name, pass: credentials.password, expires: new Date().setHours(new Date().getHours() + 2)}));
           this.loginstatus = "Successful. Redirecting you...";
-          this.router.navigate(["/dashboard/overview"]);
+          setTimeout(() => { this.router.navigate(["/dashboard/overview"]); }, 300);
         } if (data.response === "error") {
           this.errorMsg = "Something is wrong with the server. Try again later."
           this.errorDisplay = "active";

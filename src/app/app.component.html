@@ -1,20 +1,20 @@
 <clr-main-container>
-  <clr-alerts>
-    <clr-alert [clrAlertType]="'danger'" [clrAlertAppLevel]="true">
-        <div class="alert-item">
-            <span class="alert-text">
-              Our hosting provider is having problems, so our backend is down. We are considering alternatives.
-            </span>
-        </div>
-    </clr-alert>
-    <clr-alert [clrAlertType]="'success'" [clrAlertAppLevel]="true">
-        <div class="alert-item">
-            <span class="alert-text">
-              FYI: We are doing a complete backend overhaul, which will make the apps much faster and lots of new features are being added. Also, more regions are being added.
-            </span>
-        </div>
-    </clr-alert>
-  </clr-alerts>
+  <!--<clr-alerts>-->
+  <!--  <clr-alert [clrAlertType]="'danger'" [clrAlertAppLevel]="true">-->
+  <!--      <div class="alert-item">-->
+  <!--          <span class="alert-text">-->
+  <!--            Our hosting provider is having problems, so our backend is down. We are considering alternatives.-->
+  <!--          </span>-->
+  <!--      </div>-->
+  <!--  </clr-alert>-->
+  <!--  <clr-alert [clrAlertType]="'success'" [clrAlertAppLevel]="true">-->
+  <!--      <div class="alert-item">-->
+  <!--          <span class="alert-text">-->
+  <!--            FYI: We are doing a complete backend overhaul, which will make the apps much faster and lots of new features are being added. Also, more regions are being added.-->
+  <!--          </span>-->
+  <!--      </div>-->
+  <!--  </clr-alert>-->
+  <!--</clr-alerts>-->
   <clr-header class="header-5">
     <div class="branding">
       <a href="#" routerLink="/home" class="nav-link">
@@ -22,7 +22,7 @@
         <span class="title">Ping <span class="label label-info">Beta</span></span>
       </a>
     </div>
-      <div class="header-nav" [clr-nav-level]="1">
+      <div class="header-nav" [clr-nav-level]="2">
           <a class="nav-link" href="#" routerLink="/home" routerLinkActive="active" [hidden]="nameDisp"><span class="nav-text">Home</span></a>
           <a class="nav-link" href="#" routerLink="/dashboard" routerLinkActive="active" [hidden]="!nameDisp"><span class="nav-text">Home</span></a>
           <a class="nav-link" href="#" routerLink="/login/new" routerLinkActive="active" [hidden]="nameDisp"><span class="nav-text">Login</span></a>
@@ -38,7 +38,7 @@
           <clr-dropdown-menu *clrIfOpen clrPosition="bottom-right">
               <a routerLink="/dashboard" clrDropdownItem>Dashboard</a>
               <a routerLink="/dashboard/add" clrDropdownItem>Add Website</a>
-              <a routerLink="/dashboard/settings" clrDropdownItem>Settings</a>
+              <a routerLink="/dashboard/account" clrDropdownItem>Account Settings</a>
               <a routerLink="/logout" clrDropdownItem>Logout</a>
           </clr-dropdown-menu>
         </clr-dropdown>
@@ -49,15 +49,16 @@
       <router-outlet></router-outlet>
       <header class="footer header-6">
         <div class="branding">
-          <span routerLink="/home" class="nav-link">
-            &copy; hype
+          <span href="https://akaanksh.ga/" target="_blank" class="nav-link">
+            &copy; madeby:ark
           </span>
         </div>
-        <div class="header-nav" [clr-nav-level]="2">
-            <a class="nav-link" href="#" routerLink="/sponsor" routerLinkActive="active"><span class="nav-text">Sponsor Us</span></a>
-            <a class="nav-link" href="#" routerLink="/privacy" routerLinkActive="active"><span class="nav-text">Privacy</span></a>
-            <a class="nav-link" href="#" routerLink="/tos" routerLinkActive="active"><span class="nav-text">ToS</span></a>
-            <a class="nav-link" href="#" routerLink="/stats" routerLinkActive="active"><span class="nav-text">Stats</span></a>
+        <div class="header-nav" [clr-nav-level]="1">
+            <a class="nav-link" href="/bot" routerLink="/bot" routerLinkActive="active"><span class="nav-text">Bot</span></a>
+            <a class="nav-link" href="/sponsor" routerLink="/sponsor" routerLinkActive="active"><span class="nav-text">Sponsor Us</span></a>
+            <a class="nav-link" href="/privacy" routerLink="/privacy" routerLinkActive="active"><span class="nav-text">Privacy</span></a>
+            <a class="nav-link" href="/tos" routerLink="/tos" routerLinkActive="active"><span class="nav-text">ToS</span></a>
+            <a class="nav-link" href="/stats" routerLink="/stats" routerLinkActive="active"><span class="nav-text">Stats</span></a>
             <a class="nav-link" href="https://usehype.ga/" routerLinkActive="active"><span class="nav-text">hype Products</span></a>
         </div>
       </header>

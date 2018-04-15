@@ -10,6 +10,8 @@ import { SignupComponent } from './signup/signup.component';
 import { NotfoundComponent } from './notfound/notfound.component';
 import { TosComponent } from './tos/tos.component';
 import { StatsComponent } from './stats/stats.component';
+import { ArchiveComponent } from './archive/archive.component';
+import { BotComponent } from './bot/bot.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { AuthGuard } from './_guards/index';
 
@@ -20,6 +22,9 @@ export const ROUTES: Routes = [
     {path: '404', component: NotfoundComponent},
     {path: 'sponsor', component: SponsorComponent},
     {path: 'privacy', component: PrivacyComponent},
+    {path: 'archive', component: ArchiveComponent},
+    {path: 'bot', component: BotComponent},
+    {path: 'abuse', redirectTo: 'bot', pathMatch: 'full'},
     {path: 'login', redirectTo: 'login/new', pathMatch: 'full'},
     {path: 'login/:id', component: LoginComponent},
     {path: 'logout', component: LogoutComponent},

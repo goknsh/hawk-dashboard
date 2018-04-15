@@ -1,11 +1,10 @@
 <div class="login-wrapper">
-    <form [formGroup]="login" (ngSubmit)="loginUser(login.value)" class="login">
+    <form [formGroup]="login" [hidden]="signupDisplay" (ngSubmit)="loginUser(login.value)" class="login">
         <label class="title">
             Login to Ping
-            <h5 class="hint">Use your email and password to sign in or create one now</h5>
+            <h5 class="hint">Use your email and password to sign in or create an account now</h5>
         </label>
         <div class="login-group">
-            
             <div class="form-group">
                 <p>Email</p>
                 <label for="email"
@@ -43,7 +42,18 @@
             </div>
             
             <button type="submit" [disabled]="login.invalid" class="btn btn-primary">{{ loginstatus }}</button>
-            <a href="#" routerLink="/signup" class="signup">Sign up</a>
+            <a href="/signup" routerLink="/signup" class="signup">Sign up</a>
+        </div>
+    </form>
+    <form [hidden]="!signupDisplay" class="login">
+        <div class="login-group">
+            <h1>Thanks for signing up!</h1>
+            <p>We&rsquo;ve sent you an email to confirm your identity. Please open the email and click on the &rdquo;Verify Email&ldquo; button so we can get you set up.</p>
+            <div class="btn-group btn-primary">
+                <a href="/login/new" routerLink="/login/new" class="btn">Login</a>
+                <a href="https://gmail.com/" class="btn">Gmail</a>
+                <a href="https://outlook.com/" class="btn">Outlook</a>
+            </div>
         </div>
     </form>
 </div>

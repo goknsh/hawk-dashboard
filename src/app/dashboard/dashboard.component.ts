@@ -5,7 +5,9 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Chart } from 'chart.js';
 
 interface response {
-  response: string
+  response: string,
+  thresh: number,
+  name: string
 }
 
 @Component({
@@ -24,29 +26,33 @@ export class DashboardComponent implements OnInit {
   userData = null; reqData: any; reqMoreData: any;
   userStatus = JSON.parse(localStorage.getItem("currentUser"));
   loading = true; latencyLineChartJS; lookupLineChartJS;
-  localTimes = new Array(); sslTimes = new Array();
+  localTimes = new Array(); sslTimes = new Array(); sslMoreAuth = new Array(); sslMoreExp = new Array(); siteURLMore;
   errorMsg; errorDisplay = false; loginstatus; site; item; currentURL;
-  dashboardStatus = "Everything is working!"; dashboardClass = "good"; dashboardSub = "All of your websites are up and running.";
-  overviewStatus = "good"; overviewSub = "This website is up and running.";
-  sub; version; overviewDisplay = false; notfoundDisplay = false; moreDisplay = false; moreDisplayStatus; reqMoreDataForOverview = new Array(); addDisplay = false;
-  moreName; usLatencyChart = new Array(); usLookupChart = new Array(); timesForChart = new Array(); timesForLog = new Array(); outages = new Array();
+  dashboardStatus = "Loading..."; dashboardClass; dashboardSub = "We are downloading data from our servers.";
+  overviewStatus = "good"; overviewSub = "This website is up and running."; overviewRepeat; realData; serverNum;
+  sub; version; overviewDisplay = false; notfoundDisplay = false; moreDisplay = false; moreDisplayStatus; reqMoreDataForOverview = new Array(); addDisplay = false; accountDisplay = false; currentLatencyMore;
+  moreName; moreNameRegex: any; usLatencyChart = new Array(); usLookupChart = new Array(); ieLatencyChart = new Array(); ieLookupChart = new Array(); usSpeedForCharts = new Array(); ieSpeedForCharts = new Array(); timesForLatency = new Array(); timesForLookup = new Array(); timesForLog = new Array(); outages = new Array();
 
   ngOnInit() {
     document.title = "Dashboard - Ping by hype.";
     window.onbeforeunload = function(e) {
-      sessionStorage.clear()
+      sessionStorage.clear();
     };
-    this.currentURL = this.router.url;
+    if (new Date().getDate() < 15) {
+      this.serverNum = "s1";
+    } else {
+      this.serverNum = "s2";
+    }
     if (localStorage.getItem("currentUser") === null) {
       this.router.navigate(["/login", "unauthorized"]);
     } else {
       if (new Date().getTime() >= this.userStatus["expires"]) {
         localStorage.clear();
-        this.router.navigate(["/login", "loggedout"]);
+        this.router.navigate(["/login", "timeout"]);
       } else {
         this.getOverviewData();
         this.loading = true; this.overviewDisplay = false;
-        setInterval(() => { this.getOverviewData(); }, 90000);
+        this.overviewRepeat = setInterval(() => { this.getOverviewData(); }, 90000);
       }
     }
     this.routerTrack();
@@ -54,10 +60,11 @@ export class DashboardComponent implements OnInit {
   
   routerTrack() {
     this.sub = this.route.params.subscribe(params => {
+      this.currentURL = this.router.url;
       this.version = params['id'];
       if (new Date().getTime() >= this.userStatus["expires"]) {
         localStorage.clear();
-        this.router.navigate(["/login", "loggedout"]);
+        this.router.navigate(["/login", "timeout"]);
       } else {
         if (isNaN(this.version) === true) {
           if (this.version === 'overview') {
@@ -66,18 +73,28 @@ export class DashboardComponent implements OnInit {
             this.overviewDisplay = true;
             this.notfoundDisplay = false;
             this.addDisplay = false;
+            this.accountDisplay = false;
           } if (this.version === 'add') {
             this.loading = false;
             this.moreDisplay = false;
             this.overviewDisplay = false;
             this.notfoundDisplay = false;
             this.addDisplay = true;
-          } if (this.version !== "add" && this.version !== "overview") {
+            this.accountDisplay = false;
+          } if (this.version === 'account') {
+            this.loading = false;
+            this.moreDisplay = false;
+            this.overviewDisplay = false;
+            this.notfoundDisplay = false;
+            this.addDisplay = false;
+            this.accountDisplay = true;
+          } if (this.version !== "add" && this.version !== "overview" && this.version !== "account") {
             this.loading = false;
             this.moreDisplay = false;
             this.overviewDisplay = false;
             this.notfoundDisplay = true;
             this.addDisplay = false;
+            this.accountDisplay = false;
           }
         } else {
           if (sessionStorage.getItem(this.version) === null) {
@@ -96,35 +113,55 @@ export class DashboardComponent implements OnInit {
               this.loading = false;
               this.notfoundDisplay = false;
               this.addDisplay = false;
+              this.accountDisplay = false;
             }
           }
         }
       }
     });
   }
-  
+  data: any;
   getOverviewData() {
     this.userData = JSON.parse(localStorage.getItem("currentUser"));
-    this.http.get(`https://us.useping.ga/api/v1/new?site=get&email=${this.userData.email}&pass=${this.userData.pass}`).subscribe(
+    this.http.get(`https://main-${this.serverNum}.herokuapp.com/api/v2/?site=get&email=${this.userData.email}&pass=${this.userData.pass}`).subscribe(
       data => {
-        this.reqData = data; this.localTimes = []; this.sslTimes = [];
-        let i = 0; let notOk = 0;
-          for (let item of this.reqData) {
-            this.localTimes.push(new Date(item[0]["data"]["time"] + " UTC").toLocaleTimeString());
-            this.sslTimes.push(new Date(item[0]["data"]["us-ssl-expiry"] + " UTC").toLocaleString());
-            if (this.reqData[i][0]["data"]["us-status"] !== "Up") {
-              notOk++;
-            }
-            i++;
+        this.data = data;
+        if (this.data["response"] === "error") {
+          this.dashboardStatus = "Something is wrong with our server.";
+          this.dashboardSub = "We’ll try again in 90 seconds.";
+          this.dashboardClass = "bad";
+        } else {
+          if (this.data.length === 0) {
+            this.dashboardStatus = "No websites added.";
+            this.dashboardSub = "Looks like you don’t have Ping monitoring any of you websites. Go ahead and add one.";
+          } else {
+            this.reqData = data; this.localTimes = []; this.sslTimes = []; this.sslTimes["us"] = []; this.sslTimes["ie"] = [];
+            let i = 0; let notOk = 0;
+              for (let item of this.reqData) {
+                this.localTimes.push(new Date(item[0]["data"]["time"] + " GMT").toLocaleTimeString());
+                this.sslTimes["us"].push(new Date(item["us-ssl-exp"]).toLocaleString());
+                this.sslTimes["ie"].push(new Date(item["ie-ssl-exp"]).toLocaleString());
+                if (this.reqData[i][0]["data"]["us-status"] !== "Up") {
+                  notOk++;
+                } if (this.reqData[i][0]["data"]["ie-status"] !== "Up") {
+                  notOk++;
+                }
+                i++;
+              }
+              if (notOk !== 0) {
+                this.dashboardStatus = "Uh-oh. Something isn’t right.";
+                this.dashboardSub = "One or more of your websites is/are down because it returned a bad response code or has timed out.";
+                this.dashboardClass = "bad";
+              } else {
+                this.dashboardStatus = "Everything is working!";
+                this.dashboardClass = "good";
+                this.dashboardSub = "All of your websites are up and running.";
+              }
+              if (this.version === 'overview') {
+                this.overviewDisplay = true; this.loading = false;
+              }
           }
-          if (notOk !== 0) {
-            this.dashboardStatus = "Uh-oh. Something isn’t right.";
-            this.dashboardSub = "One or more of your websites is/are down because it returned a bad response code or has timed out.";
-            this.dashboardClass = "bad";
-          }
-          if (this.version === 'overview') {
-            this.overviewDisplay = true; this.loading = false;
-          }
+        }
       },
       (err: HttpErrorResponse) => {
         if (err.error instanceof Error) {
@@ -137,36 +174,292 @@ export class DashboardComponent implements OnInit {
       }
     )
   }
+  passwordChange = new FormGroup({
+    passwordChangeToThis: new FormControl('', Validators.compose([Validators.required]))
+  });
+  addWebsite = new FormGroup({
+    url: new FormControl('', Validators.compose([Validators.required, Validators.pattern("https?:\\/\\/(www\\.)?[-a-zA-Z0-9@:%._\\+~#=]{2,256}\\.[a-z]{2,6}\\b([-a-zA-Z0-9@:%_\\+.~#?&//=]*)")])),
+    timeout: new FormControl('', Validators.compose([Validators.required])),
+    title: new FormControl('', Validators.compose([Validators.required]))
+  });
   
+  errorMsgAdd; addErrorAlertType = "info"; addErrorDisplay = false; addWebsiteStatus = "Add Website";
+  
+
+  passwordChangeButton = "Change Password";
+  
+  passwordChangeTo(value) {
+    this.http.get<response>(`https://main-${this.serverNum}.herokuapp.com/api/v2/?change=email&email=${this.userData.email}&to=${value.emailChangeToThis}&pass=${this.userData.pass}`).subscribe(
+      data => {
+        if (data.response === "mismatch") {
+          this.passwordChangeButton = "Unauthorized!";
+          setTimeout(() => { this.router.navigate(["/login", "unauthorized"]); }, 200);
+        } if (data.response === "success") {
+          this.passwordChangeButton = "Website Deleted. Taking you to all websites overview."; this.deleteWebsite.reset(); this.getOverviewData();
+          setTimeout(() => { this.passwordChangeButton = "Change Password"; }, 1000);
+        } if (data.response === "error") {
+          this.passwordChangeButton = "An error occured";
+          setTimeout(() => { this.passwordChangeButton = "Change Password"; }, 1000);
+        }
+      },
+      (err: HttpErrorResponse) => {
+        if (err.error instanceof Error) {
+          this.passwordChangeButton = "An error occured";
+          setTimeout(() => { this.passwordChangeButton = "Change Password"; }, 1000);
+        } else {
+          this.passwordChangeButton = "An error occured";
+          setTimeout(() => { this.passwordChangeButton = "Change Password"; }, 1000);
+        }
+      }
+    )
+  }
+  
+  notificationSettings = new FormGroup({
+    passwordChangeToThis: new FormControl('', Validators.compose([Validators.required]))
+  });
+
+  notificationButton = "Save Settings";
+  
+  notificationSettingsChange(value) {
+    this.http.get<response>(`https://main-${this.serverNum}.herokuapp.com/api/v2/?change=email&email=${this.userData.email}&to=${value.emailChangeToThis}&pass=${this.userData.pass}`).subscribe(
+      data => {
+        if (data.response === "mismatch") {
+          this.passwordChangeButton = "Unauthorized!";
+          setTimeout(() => { this.router.navigate(["/login", "unauthorized"]); }, 200);
+        } if (data.response === "success") {
+          this.passwordChangeButton = "Website Deleted. Taking you to all websites overview."; this.deleteWebsite.reset(); this.getOverviewData();
+          setTimeout(() => { this.passwordChangeButton = "Change Password"; }, 1000);
+        } if (data.response === "error") {
+          this.passwordChangeButton = "An error occured";
+          setTimeout(() => { this.passwordChangeButton = "Change Password"; }, 1000);
+        }
+      },
+      (err: HttpErrorResponse) => {
+        if (err.error instanceof Error) {
+          this.passwordChangeButton = "An error occured";
+          setTimeout(() => { this.passwordChangeButton = "Change Password"; }, 1000);
+        } else {
+          this.passwordChangeButton = "An error occured";
+          setTimeout(() => { this.passwordChangeButton = "Change Password"; }, 1000);
+        }
+      }
+    )
+  }
+  
+  addWebsiteToDB(website) {
+    this.addWebsiteStatus = "Contacting server...";
+    this.http.get<response>(`https://main-${this.serverNum}.herokuapp.com/api/v2/?add=true&url=${website.url}&title=${website.title}&timeout=${website.timeout}&email=${this.userData.email}&pass=${this.userData.pass}`).subscribe(
+      data => {
+        if (data.response === "mismatch") {
+          this.errorMsgAdd = "Incorrect email or password or account does not exist."
+          this.addErrorAlertType = "alert-danger";
+          this.addErrorDisplay = true;
+          this.addWebsiteStatus = "Add website";
+          setTimeout(() => { this.router.navigate(["/login", "unauthorized"]); }, 200);
+        } if (data.response === "exists") {
+          this.errorMsgAdd = "The website you're trying to add already exists."
+          this.addErrorAlertType = "alert-danger";
+          this.addErrorDisplay = true;
+          this.addWebsiteStatus = "Add website";
+        } if (data.response === "success") {
+          this.errorMsgAdd = "Website successfully added."
+          this.addErrorAlertType = "alert-success";
+          this.addErrorDisplay = true;
+          this.addWebsiteStatus = "Add website";
+          this.addWebsite.reset();
+          this.getOverviewData();
+          setInterval(() => { this.addErrorDisplay = false; }, 3000);
+        } if (data.response === "error") {
+          this.errorMsgAdd = "Something is wrong with the server. Try again later."
+          this.addErrorAlertType = "alert-danger";
+          this.addErrorDisplay = true;
+          this.addWebsiteStatus = "Add website";
+        }
+      },
+      (err: HttpErrorResponse) => {
+        if (err.error instanceof Error) {
+          this.errorMsgAdd = "Something is wrong on your side. Are you online? If you have an AdBlocker, try turning it off."
+          this.addErrorAlertType = "alert-danger";
+          this.addErrorDisplay = true;
+        } else {
+          this.errorMsgAdd = "Something is wrong with the server. Try again later, or we’ll automatically try to connect to the server again in 90 seconds."
+          this.addErrorAlertType = "alert-danger";
+          this.addErrorDisplay = true;
+        }
+      }
+    )
+  }
+  
+  emailChange = new FormGroup({
+    emailChangeToThis: new FormControl('', Validators.compose([Validators.email, Validators.required]))
+  });
+
+  emailControlButton = "Change Email";
+  
+  emailChangeTo(value) {
+    this.http.get<response>(`https://main-${this.serverNum}.herokuapp.com/api/v2/?change=email&email=${this.userData.email}&to=${value.emailChangeToThis}&pass=${this.userData.pass}`).subscribe(
+      data => {
+        if (data.response === "mismatch") {
+          this.emailControlButton = "Unauthorized!";
+          setTimeout(() => { this.router.navigate(["/login", "unauthorized"]); }, 200);
+        } if (data.response === "success") {
+          this.emailControlButton = "Website Deleted. Taking you to all websites overview."; this.deleteWebsite.reset(); this.getOverviewData();
+          setTimeout(() => { this.emailControlButton = "Change Email"; }, 1000);
+        } if (data.response === "error") {
+          this.emailControlButton = "An error occured";
+          setTimeout(() => { this.emailControlButton = "Change Email"; }, 1000);
+        }
+      },
+      (err: HttpErrorResponse) => {
+        if (err.error instanceof Error) {
+          this.emailControlButton = "An error occured";
+          setTimeout(() => { this.emailControlButton = "Change Email"; }, 1000);
+        } else {
+          this.emailControlButton = "An error occured";
+          setTimeout(() => { this.emailControlButton = "Change Email"; }, 1000);
+        }
+      }
+    )
+  }
+  
+  changeLatency = new FormGroup({
+    changeLatencyTo: new FormControl('', Validators.compose([Validators.required]))
+  });
+  
+  changeLatencyButton = "Change Latency";
+  
+  changeLatencyTo(value) {
+    this.http.get<response>(`https://main-${this.serverNum}.herokuapp.com/api/v2/?change=latency&to=${value.changeLatencyTo}&url=${this.siteURLMore}&email=${this.userData.email}&pass=${this.userData.pass}`).subscribe(
+      data => {
+        if (data.response === "mismatch") {
+          this.changeLatencyButton = "Unauthorized!";
+          setTimeout(() => { this.router.navigate(["/login", "unauthorized"]); }, 200);
+        } if (data.response === "success") {
+          this.changeLatencyButton = "Latency Threshold Changed"; this.currentLatencyMore = data.thresh; this.changeLatency.reset();
+          setTimeout(() => { this.changeLatencyButton = "Change Latency"; }, 1000);
+        } if (data.response === "error") {
+          this.changeLatencyButton = "An error occured";
+          setTimeout(() => { this.changeLatencyButton = "Change Latency"; }, 1000);
+        }
+      },
+      (err: HttpErrorResponse) => {
+        if (err.error instanceof Error) {
+          this.changeLatencyButton = "An error occured";
+          setTimeout(() => { this.changeLatencyButton = "Change Latency"; }, 1000);
+        } else {
+          this.changeLatencyButton = "An error occured";
+          setTimeout(() => { this.changeLatencyButton = "Change Latency"; }, 1000);
+        }
+      }
+    )
+  }
+  
+  changeWebsiteName = new FormGroup({
+    changeWebsiteNameTo: new FormControl('', Validators.compose([Validators.required]))
+  });
+  
+  changeWebsiteButton = "Change Name";
+  
+  changeWebsiteNameTo(value) {
+    this.http.get<response>(`https://main-${this.serverNum}.herokuapp.com/api/v2/?change=website&to=${value.changeWebsiteNameTo}&url=${this.siteURLMore}&email=${this.userData.email}&pass=${this.userData.pass}`).subscribe(
+      data => {
+        if (data.response === "mismatch") {
+          this.changeWebsiteButton = "Unauthorized!";
+          setTimeout(() => { this.router.navigate(["/login", "unauthorized"]); }, 200);
+        } if (data.response === "success") {
+          this.changeWebsiteButton = "Name Changed"; this.moreName = data.name; this.currentLatencyMore = data.name; this.changeWebsiteName.reset();
+          setTimeout(() => { this.changeWebsiteButton = "Change Name"; }, 1000);
+        } if (data.response === "error") {
+          this.changeWebsiteButton = "An error occured";
+          setTimeout(() => { this.changeWebsiteButton = "Change Name"; }, 1000);
+        }
+      },
+      (err: HttpErrorResponse) => {
+        if (err.error instanceof Error) {
+          this.changeWebsiteButton = "An error occured";
+          setTimeout(() => { this.changeWebsiteButton = "Change Name"; }, 1000);
+        } else {
+          this.changeWebsiteButton = "An error occured";
+          setTimeout(() => { this.changeWebsiteButton = "Change Name"; }, 1000);
+        }
+      }
+    )
+  }
+  
+  deleteWebsite = new FormGroup({
+    confirm: new FormControl('', Validators.compose([Validators.required]))
+  });
+  
+  deleteButton = "Delete Check";
+  
+  deleteWebsiteSubmit(value) {
+    this.http.get<response>(`https://main-${this.serverNum}.herokuapp.com/api/v2/?delete=true&id=${this.version}&url=${this.siteURLMore}&email=${this.userData.email}&pass=${this.userData.pass}`).subscribe(
+      data => {
+        if (data.response === "mismatch") {
+          this.deleteButton = "Unauthorized!";
+          setTimeout(() => { this.router.navigate(["/login", "unauthorized"]); }, 200);
+        } if (data.response === "success") {
+          this.deleteButton = "Website Deleted. Taking you to all websites overview."; this.deleteWebsite.reset(); this.getOverviewData();
+          setTimeout(() => { this.router.navigate(["/dashboard", "overview"]); this.deleteButton = "Delete Check"; }, 1000);
+        } if (data.response === "error") {
+          this.deleteButton = "An error occured";
+          setTimeout(() => { this.router.navigate(["/dashboard", "overview"]); this.deleteButton = "Delete Check"; }, 1000);
+        }
+      },
+      (err: HttpErrorResponse) => {
+        if (err.error instanceof Error) {
+          this.deleteButton = "An error occured";
+          setTimeout(() => { this.deleteButton = "Delete Check"; }, 1000);
+        } else {
+          this.deleteButton = "An error occured";
+          setTimeout(() => { this.deleteButton = "Delete Check"; }, 1000);
+        }
+      }
+    )
+  }
+  
+  letter: any; usUptime; ieUptime; usUptimeWk; ieUptimeWk; usUptimeMn; ieUptimeMn; usLatency; ieLatency; usLookup; ieLookup; usSpeed; ieSpeed;
   getMoreData(id) {
-    this.loading = true;
-    this.overviewDisplay = false;
-    
+    this.loading = true; this.overviewDisplay = false; this.sslMoreAuth = new Array(); this.sslMoreExp = new Array(); this.reqMoreDataForOverview = new Array(); this.addDisplay = false; this.accountDisplay = false; this.currentLatencyMore; this.moreNameRegex = new Array();
     this.userData = JSON.parse(localStorage.getItem("currentUser"));
-    this.http.get(`https://us.useping.ga/api/v1/new?site=more&id=${id}&email=${this.userData.email}&pass=${this.userData.pass}`).subscribe(
+    
+    this.http.get(`https://main-${this.serverNum}.herokuapp.com/api/v2/?site=more&id=${id}&email=${this.userData.email}&pass=${this.userData.pass}`).subscribe(
       data => {
         this.moreDisplayStatus = "Everything is working!";
         this.moreName = data["name"];
-        delete data[0]["id"]; delete data[0]["name"]; delete data[0]["site"];
+        for (this.letter of Array.from(this.moreName)) {
+          this.moreNameRegex.push(`[${this.letter.toLowerCase()}${this.letter.toUpperCase()}]`);
+        }
+        this.moreNameRegex = this.moreNameRegex.toString().replace(/,/g, '');
+        this.siteURLMore = data["site"];
+        this.sslMoreAuth.push(data["us-ssl-auth"]); this.sslMoreAuth.push(data["ie-ssl-auth"]); this.currentLatencyMore = data["thresh"];
+        this.sslMoreExp.push(new Date(data["us-ssl-exp"]).toLocaleString()); this.sslMoreExp.push(new Date(data["ie-ssl-exp"]).toLocaleString());
         this.reqMoreData = new Array(); this.reqMoreData.push(data[0]); this.reqMoreData = this.reqMoreData[0]; this.reqMoreDataForOverview.push(this.reqMoreData[0][0]);
         let i = 0;
+        this.timesForLatency = new Array(); this.timesForLookup = new Array(); this.timesForLog = new Array(); this.usLatencyChart = new Array(); this.usLookupChart = new Array(); this.usSpeedForCharts = new Array(); this.ieLatencyChart = new Array(); this.ieLookupChart = new Array(); this.ieSpeedForCharts = new Array(); this.outages = new Array();
         for (let item of this.reqMoreData) {
+          this.timesForLatency.push(new Date(item[0]["time"] + " UTC").toLocaleTimeString());
+          this.timesForLookup.push(new Date(item[0]["time"] + " UTC").toLocaleTimeString());
           this.timesForLog.push(new Date(item[0]["time"] + " UTC").toLocaleString());
-          this.timesForChart.push(new Date(item[0]["time"] + " UTC").toLocaleTimeString());
-          this.usLatencyChart.push(item[0]["us-ping"]);
-          this.usLookupChart.push(item[0]["us-lookup"]);
+          this.usLatencyChart.push(item[0]["us-latency"]); this.ieLatencyChart.push(item[0]["ie-latency"]);
+          this.usLookupChart.push(item[0]["us-lookup"]); this.ieLookupChart.push(item[0]["ie-lookup"]);
+          this.usSpeedForCharts.push(item[0]["us-speed"]); this.ieSpeedForCharts.push(item[0]["ie-speed"]);
           if (item[0]["outage"] === "1") {
             this.outages.push(i);
           }
           i++;
         }
-        // if (item[0]["us-status"] !== "Up" | item[0]["uk-status"] !== "Up" | item[0]["in-status"] !== "Up") {
-        
-        if (this.reqMoreData[0][0]["us-status"] !== "Up") {
+        if (this.reqMoreData[0][0]["us-status"] !== "Up" || this.reqMoreData[0][0]["ie-status"] !== "Up") {
           this.overviewStatus = "bad";
           this.overviewSub = "This website is down because it returned a bad response code or has timed out.";
         }
         
+        this.usUptime = data["us-uptime"]; this.ieUptime = data["ie-uptime"];
+        this.usUptimeWk = data["us-uptime-wk"]; this.ieUptimeWk = data["ie-uptime-wk"];
+        this.usUptimeMn = data["us-uptime-mn"]; this.ieUptimeMn = data["ie-uptime-mn"];
+        this.usLatency = data["us-latency"]; this.ieLatency = data["ie-latency"];
+        this.usLookup = data["us-lookup"]; this.ieLookup = data["ie-lookup"];
+        this.usSpeed = data["us-speed"]; this.ieSpeed = data["ie-speed"];
         this.drawCharts();
         this.loading = false; this.moreDisplay = true;
       },
@@ -183,29 +476,28 @@ export class DashboardComponent implements OnInit {
   }
   
   drawCharts() {
-    Chart.defaults.global.defaultFontFamily = 'IBM Plex Sans';
+    Chart.defaults.global.defaultFontFamily = 'Colfax';
+    if (this.latencyLineChartJS !== undefined) {
+      this.latencyLineChartJS.destroy();
+      this.lookupLineChartJS.destroy();
+    }
     this.latencyLineChartJS = new Chart('latencyLineChart', {
       type: 'line',
       data: {
-        labels: this.timesForChart.splice(0, 61).reverse(),
+        labels: this.timesForLatency.splice(0, 61).reverse(),
         datasets: [{
           label: "Latency in US",
           backgroundColor: "rgba(255, 99, 132, 0.2)",
           borderColor: "rgba(255, 99, 132, 1)",
           data: this.usLatencyChart.splice(0, 61).reverse(),
-          fill: true,
+          speed: this.usSpeedForCharts
         }, {
-          label: "Latency in GB",
+          label: "Latency in IE",
           fill: true,
           backgroundColor: "rgba(44, 249, 116, 0.2)",
           borderColor: "rgba(44, 249, 116, 1)",
-          // data: this.usLatencyChart.splice(0, 61),
-        }, {
-          label: "Latency in IN",
-          fill: true,
-          backgroundColor: "rgba(63, 176, 229, 0.2)",
-          borderColor: "rgba(63, 176, 229, 1)",
-          // data: this.usLatencyChart.splice(0, 61),
+          data: this.ieLatencyChart.splice(0, 61).reverse(),
+          speed: this.ieSpeedForCharts
         }]
       },
       options: {
@@ -218,7 +510,16 @@ export class DashboardComponent implements OnInit {
         },
         tooltips: {
           mode: 'index',
-          intersect: false
+          intersect: false,
+            callbacks: {
+                label: function(tooltipItems, data) {
+                  if (tooltipItems.datasetIndex === 0) {
+                    return 'United States: ' + tooltipItems.yLabel + 'ms @ ' + data.datasets[tooltipItems.datasetIndex].speed[tooltipItems.index] + "mbps";
+                  } if (tooltipItems.datasetIndex === 1) {
+                    return 'Ireland: ' + tooltipItems.yLabel + 'ms @ ' + data.datasets[tooltipItems.datasetIndex].speed[tooltipItems.index] + "mbps";
+                  }
+                }
+            }
         },
         hover: {
           mode: 'nearest',
@@ -246,38 +547,42 @@ export class DashboardComponent implements OnInit {
     this.lookupLineChartJS = new Chart('lookupLineChart', {
       type: 'line',
       data: {
-        labels: this.timesForChart.splice(0, 61).reverse(),
+        labels: this.timesForLookup.splice(0, 61).reverse(),
         datasets: [{
-          label: "Nameserver Lookup in US",
+          label: "Nameserver Lookup Latency in US",
           backgroundColor: "rgba(255, 99, 132, 0.2)",
           borderColor: "rgba(255, 99, 132, 1)",
           data: this.usLookupChart.splice(0, 61).reverse(),
-          fill: true,
+          speed: this.usSpeedForCharts
         }, {
-          label: "Nameserver Lookup in GB",
+          label: "Nameserver Lookup Latency in IE",
           fill: true,
           backgroundColor: "rgba(44, 249, 116, 0.2)",
           borderColor: "rgba(44, 249, 116, 1)",
-          // data: this.usLookupChart.splice(0, 61),
-        }, {
-          label: "Nameserver Lookup in IN",
-          fill: true,
-          backgroundColor: "rgba(63, 176, 229, 0.2)",
-          borderColor: "rgba(63, 176, 229, 1)",
-          // data: this.usLookupChart.splice(0, 61),
+          data: this.ieLookupChart.splice(0, 61).reverse(),
+          speed: this.ieSpeedForCharts
         }]
       },
       options: {
         responsive: true,
         title:{
           display:true,
-          text: 'Nameserver Lookup for last 60 checks',
+          text: 'Nameserver Lookup Latency for last 60 checks',
           fontSize: 28,
           fontColor: 'black',
         },
         tooltips: {
           mode: 'index',
-          intersect: false
+          intersect: false,
+            callbacks: {
+              label: function(tooltipItems, data) {
+                if (tooltipItems.datasetIndex === 0) {
+                  return 'United States: ' + tooltipItems.yLabel + 'ms @ ' + data.datasets[tooltipItems.datasetIndex].speed[tooltipItems.index] + "mbps";
+                } if (tooltipItems.datasetIndex === 1) {
+                  return 'Ireland: ' + tooltipItems.yLabel + 'ms @ ' + data.datasets[tooltipItems.datasetIndex].speed[tooltipItems.index] + "mbps";
+                }
+              }
+            }
         },
         hover: {
           mode: 'nearest',
@@ -301,50 +606,6 @@ export class DashboardComponent implements OnInit {
         }
       }
     });
-  }
-  
-  urlRegex = "(((http|ftp|https):\/{2})+(([0-9a-z_-]+\.)+(aero|asia|biz|cat|com|coop|edu|gov|info|int|jobs|mil|mobi|museum|name|net|org|pro|tel|travel|ac|ad|ae|af|ag|ai|al|am|an|ao|aq|ar|as|at|au|aw|ax|az|ba|bb|bd|be|bf|bg|bh|bi|bj|bm|bn|bo|br|bs|bt|bv|bw|by|bz|ca|cc|cd|cf|cg|ch|ci|ck|cl|cm|cn|co|cr|cu|cv|cx|cy|cz|cz|de|dj|dk|dm|do|dz|ec|ee|eg|er|es|et|eu|fi|fj|fk|fm|fo|fr|ga|gb|gd|ge|gf|gg|gh|gi|gl|gm|gn|gp|gq|gr|gs|gt|gu|gw|gy|hk|hm|hn|hr|ht|hu|id|ie|il|im|in|io|iq|ir|is|it|je|jm|jo|jp|ke|kg|kh|ki|km|kn|kp|kr|kw|ky|kz|la|lb|lc|li|lk|lr|ls|lt|lu|lv|ly|ma|mc|md|me|mg|mh|mk|ml|mn|mn|mo|mp|mr|ms|mt|mu|mv|mw|mx|my|mz|na|nc|ne|nf|ng|ni|nl|no|np|nr|nu|nz|nom|pa|pe|pf|pg|ph|pk|pl|pm|pn|pr|ps|pt|pw|py|qa|re|ra|rs|ru|rw|sa|sb|sc|sd|se|sg|sh|si|sj|sj|sk|sl|sm|sn|so|sr|st|su|sv|sy|sz|tc|td|tf|tg|th|tj|tk|tl|tm|tn|to|tp|tr|tt|tv|tw|tz|ua|ug|uk|us|uy|uz|va|vc|ve|vg|vi|vn|vu|wf|ws|ye|yt|yu|za|zm|zw|arpa)(:[0-9]+)?((\/([~0-9a-zA-Z\#\+\%@\.\/_-]+))?(\?[0-9a-zA-Z\+\%@\/&\[\];=_-]+)?)?))\b";
-  
-  addWebsite = new FormGroup({
-    url: new FormControl('', Validators.compose([Validators.required, Validators.pattern("https?:\\/\\/(www\\.)?[-a-zA-Z0-9@:%._\\+~#=]{2,256}\\.[a-z]{2,6}\\b([-a-zA-Z0-9@:%_\\+.~#?&//=]*)")])),
-    timeout: new FormControl('', Validators.compose([Validators.required])),
-    title: new FormControl('', Validators.compose([Validators.required]))
-  });
-  
-  errorMsgAdd; errorDisplayAdd = "error inactive"; addWebsiteStatus = "Add Website";
-  
-  addWebsiteToDB(website) {
-    this.addWebsiteStatus = "Contacting server...";
-    this.http.get<response>(`https://us.useping.ga/api/v1/new?add=true&url=${website.url}&title=${website.title}&timeout=${website.timeout}&email=${this.userData.email}&pass=${this.userData.pass}`).subscribe(
-      data => {
-        if (data.response === "mismatch") {
-          this.errorMsgAdd = "Incorrect email or password or account does not exist."
-          this.errorDisplayAdd = "error active";
-          this.addWebsiteStatus = "Add website";
-        } if (data.response === "exists") {
-          this.errorMsgAdd = "The website you're trying to add already exists."
-          this.errorDisplayAdd = "error active";
-          this.addWebsiteStatus = "Add website";
-        } if (data.response === "success") {
-          this.errorMsgAdd = "Website successfully added."
-          this.errorDisplayAdd = "success active";
-          this.addWebsiteStatus = "Add website";
-        } if (data.response === "error") {
-          this.errorMsgAdd = "Something is wrong with the server. Try again later."
-          this.errorDisplayAdd = "error active";
-          this.addWebsiteStatus = "Add website";
-        }
-      },
-      (err: HttpErrorResponse) => {
-        if (err.error instanceof Error) {
-          this.errorMsgAdd = "Something is wrong on your side. Are you online? If you have an AdBlocker, try turning it off."
-          this.errorDisplayAdd = "active";
-        } else {
-          this.errorMsgAdd = "Something is wrong with the server. Try again later, or we’ll automatically try to connect to the server again in 90 seconds."
-          this.errorDisplayAdd = "active";
-        }
-      }
-    )
   }
   
   backButton() {

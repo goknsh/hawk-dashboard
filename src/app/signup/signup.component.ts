@@ -26,11 +26,16 @@ export class SignupComponent implements OnInit {
 
   errorMsg = "No errors recieved";
   errorDisplay = "inactive";
+  serverNum;
   
   ngOnInit() {
     document.title = "Sign up - Ping by hype.";
     if (localStorage.getItem("currentUser") !== null) {
       this.router.navigate(["/dashboard"]);
+    } if (new Date().getDate() < 15) {
+      this.serverNum = "s1";
+    } else {
+      this.serverNum = "s2";
     }
   }
   
@@ -44,7 +49,7 @@ export class SignupComponent implements OnInit {
   
   signUpUser(credentials) {
     this.signupstatus = "Contacting server...";
-    this.http.get<response>(`https://us.useping.ga/api/v1/new?signup=true&name=${credentials.name}&email=${credentials.email}&pass=${credentials.password}`).subscribe(
+    this.http.get<response>(`https://main-${this.serverNum}.herokuapp.com/api/v2/?signup=true&name=${credentials.name}&email=${credentials.email}&pass=${credentials.password}`).subscribe(
       data => {
         if (data.response === "exists") {
           this.errorMsg = "An account with that email already exist."
