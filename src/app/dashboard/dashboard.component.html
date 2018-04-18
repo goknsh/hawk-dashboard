@@ -32,78 +32,52 @@
             </div>
         </div>
         <div class="content">
-            <h3>Soon</h3>
-            <!--<form class="form" [formGroup]="emailChange" (ngSubmit)="emailChangeTo(emailChange.value)">-->
-            <!--    <section class="form-block">-->
-            <!--        <label class="main">Change Email</label>-->
-            <!--        <div class="form-group">-->
-            <!--            <label for="currentEmail">Current Email</label>-->
-            <!--            <input type="text" value="{{this.userData.email}}" disabled>-->
-            <!--        </div>-->
-            <!--        <div class="form-group">-->
-            <!--            <label for="changeEmailTo">Change Email to</label>-->
-            <!--            <label for="changeEmailTo"-->
-            <!--                aria-haspopup="true"-->
-            <!--                role="tooltip"-->
-            <!--                class="tooltip tooltip-validation tooltip-sm"-->
-            <!--                [class.invalid]="emailChange.get('emailChangeToThis').invalid-->
-            <!--                    && (emailChange.get('emailChangeToThis').dirty || emailChange.get('emailChangeToThis').touched)">-->
-            <!--                <input type="email" spellcheck="false" formControlName="emailChangeToThis">-->
-            <!--                <span class="tooltip-content">-->
-            <!--                    Change Email to must be valid, cannot be empty or may not be your previous email. -->
-            <!--                </span>-->
-            <!--            </label>-->
-            <!--        </div>-->
-            <!--        <button class="btn btn-primary" type="submit"-->
-            <!--            [disabled]="emailChange.invalid">{{emailControlButton}}</button>-->
-            <!--    </section>-->
-            <!--</form>-->
-            <!--<form class="form" [formGroup]="passwordChange" (ngSubmit)="passwordChangeTo(passwordChange.value)">-->
-            <!--    <section class="form-block">-->
-            <!--        <label class="main">Change Password</label>-->
-            <!--        <div class="form-group">-->
-            <!--            <label for="currentPassword">Current Password</label>-->
-            <!--            <input type="password" placeholder="Soon to be changed">-->
-            <!--        </div>-->
-            <!--        <div class="form-group">-->
-            <!--            <label for="newPassword">New Password</label>-->
-            <!--            <label for="newPassword"-->
-            <!--                aria-haspopup="true"-->
-            <!--                role="tooltip"-->
-            <!--                class="tooltip tooltip-validation tooltip-sm"-->
-            <!--                [class.invalid]="passwordChange.get('passwordChangeToThis').invalid-->
-            <!--                    && (passwordChange.get('passwordChangeToThis').dirty || passwordChange.get('passwordChangeToThis').touched)">-->
-            <!--                <input type="password" spellcheck="false" placeholder="No one shall know" formControlName="passwordChange">-->
-            <!--                <span class="tooltip-content">-->
-            <!--                    The password cannot be empty.-->
-            <!--                </span>-->
-            <!--            </label>-->
-            <!--        </div>-->
-            <!--        <button class="btn btn-primary" type="submit"-->
-            <!--            [disabled]="passwordChange.invalid">{{passwordChangeButton}}</button>-->
-            <!--    </section>-->
-            <!--</form>-->
-            <!--<form class="form" [formGroup]="notificationSettings" (ngSubmit)="notificationSettingsChange(notificationSettings.value)">-->
-            <!--    <section class="form-block">-->
-            <!--        <label class="main">Notification Settings</label>-->
-            <!--        <div class="form-group">-->
-            <!--            <label for="newPassword">New Password</label>-->
-            <!--            <label for="newPassword"-->
-            <!--                aria-haspopup="true"-->
-            <!--                role="tooltip"-->
-            <!--                class="tooltip tooltip-validation tooltip-sm"-->
-            <!--                [class.invalid]="notificationSettings.get('passwordChangeToThis').invalid-->
-            <!--                    && (notificationSettings.get('passwordChangeToThis').dirty || notificationSettings.get('passwordChangeToThis').touched)">-->
-            <!--                <input type="password" spellcheck="false" placeholder="No one shall know" formControlName="notificationSettings">-->
-            <!--                <span class="tooltip-content">-->
-            <!--                    The password cannot be empty.-->
-            <!--                </span>-->
-            <!--            </label>-->
-            <!--        </div>-->
-            <!--        <button class="btn btn-primary" type="submit"-->
-            <!--            [disabled]="notificationSettings.invalid">{{notificationButton}}</button>-->
-            <!--    </section>-->
-            <!--</form>-->
+            <form class="form" [formGroup]="passwordChange" (ngSubmit)="passwordChangeTo(passwordChange.value)">
+                <section class="form-block">
+                    <label class="main">Change Password</label>
+                    <div class="form-group">
+                        <label for="currentPassword">Current Password</label>
+                        <input type="password" placeholder="Soon to be changed">
+                    </div>
+                    <div class="form-group">
+                        <label for="newPassword">New Password</label>
+                        <label for="newPassword"
+                            aria-haspopup="true"
+                            role="tooltip"
+                            class="tooltip tooltip-top-left tooltip-validation tooltip-sm"
+                            [class.invalid]="passwordChange.get('passwordChangeToThis').invalid
+                                && (passwordChange.get('passwordChangeToThis').dirty || passwordChange.get('passwordChangeToThis').touched)">
+                            <input type="password" placeholder="This will be new" formControlName="passwordChangeToThis">
+                            <span class="tooltip-content">
+                                Password is required.
+                            </span>
+                        </label>
+                    </div>
+                    <button class="btn btn-primary" type="submit"
+                        [disabled]="passwordChange.invalid">{{passwordChangeButton}}</button>
+                </section>
+            </form>
+            <form class="form" [formGroup]="emailChange" (ngSubmit)="emailChangeTo(emailChange.value)">
+                <section class="form-block">
+                    <label class="main">Change Email</label>
+                    <div class="form-group">
+                        <label for="currentPassword">Current Email</label>
+                        <input type="password" placeholder="{{this.userData.email}}" disabled>
+                    </div>
+                    <div class="form-group">
+                        <label for="newEmail">New Email</label>
+                        <label for="newEmail" aria-haspopup="true" role="tooltip" class="tooltip tooltip-top-left tooltip-validation tooltip-sm"
+                            [class.invalid]="emailChange.get('emailChangeToThis').invalid
+                                && (emailChange.get('emailChangeToThis').dirty || emailChange.get('emailChangeToThis').touched)">
+                            <input type="password" placeholder="myOtherEmail@domain.tld" formControlName="emailChangeToThis">
+                            <span class="tooltip-content">
+                                Email is required and must be valid.
+                            </span>
+                        </label>
+                    </div>
+                    <button class="btn btn-primary" type="submit" [disabled]="emailChange.invalid">{{emailControlButton}}</button>
+                </section>
+            </form>
         </div>
     </div>
 
@@ -154,7 +128,7 @@ Click to view more stats" class="btn btn-sm btn-link">more <clr-icon shape="arro
                 </div>
             </div>
             <div class="col-lg-4 col-md-8 col-sm-12 col-xs-12 addSite">
-                <div class="card clickable">
+                <div class="card">
                     <div class="card-header">
                         <a href="/dashboard/add" routerLink="/dashboard/add">Add a site <clr-icon shape="arrow right" style="width:24px;height:24px;"></clr-icon></a>
                     </div>
@@ -545,7 +519,7 @@ Click to view more stats" class="btn btn-sm btn-link">more <clr-icon shape="arro
                                     <label for="changeLatencyTo"
                                         aria-haspopup="true"
                                         role="tooltip"
-                                        class="tooltip tooltip-validation tooltip-sm"
+                                        class="tooltip tooltip-top-left tooltip-validation tooltip-sm"
                                         [class.invalid]="changeLatency.get('changeLatencyTo').invalid
                                             && (changeLatency.get('changeLatencyTo').dirty ||
                                             changeLatency.get('changeLatencyTo').touched)">
@@ -575,7 +549,7 @@ Click to view more stats" class="btn btn-sm btn-link">more <clr-icon shape="arro
                                     <label for="changeWebsiteNameTo"
                                         aria-haspopup="true"
                                         role="tooltip"
-                                        class="tooltip tooltip-validation tooltip-sm"
+                                        class="tooltip tooltip-top-left tooltip-validation tooltip-sm"
                                         [class.invalid]="changeWebsiteName.get('changeWebsiteNameTo').invalid
                                             && (changeWebsiteName.get('changeWebsiteNameTo').dirty ||
                                             changeWebsiteName.get('changeWebsiteNameTo').touched)">
@@ -599,7 +573,7 @@ Click to view more stats" class="btn btn-sm btn-link">more <clr-icon shape="arro
                                     <label for="confirm"
                                         aria-haspopup="true"
                                         role="tooltip"
-                                        class="tooltip tooltip-validation tooltip-sm"
+                                        class="tooltip tooltip-top-left tooltip-validation tooltip-sm"
                                         [class.invalid]="deleteWebsite.get('confirm').invalid
                                             && (deleteWebsite.get('confirm').dirty ||
                                             deleteWebsite.get('confirm').touched)">
@@ -634,7 +608,7 @@ Click to view more stats" class="btn btn-sm btn-link">more <clr-icon shape="arro
                         <label for="url"
                                 aria-haspopup="true"
                                 role="tooltip"
-                                class="tooltip tooltip-validation tooltip-sm"
+                                class="tooltip tooltip-top-left tooltip-validation tooltip-sm"
                                 [class.invalid]="addWebsite.get('url').invalid
                                     && (addWebsite.get('url').dirty ||
                                     addWebsite.get('url').touched)">
@@ -650,7 +624,7 @@ Click to view more stats" class="btn btn-sm btn-link">more <clr-icon shape="arro
                         <label for="title"
                                 aria-haspopup="true"
                                 role="tooltip"
-                                class="tooltip tooltip-validation tooltip-sm"
+                                class="tooltip tooltip-top-left tooltip-validation tooltip-sm"
                                 [class.invalid]="addWebsite.get('title').invalid
                                     && (addWebsite.get('title').dirty ||
                                     addWebsite.get('title').touched)">
@@ -666,7 +640,7 @@ Click to view more stats" class="btn btn-sm btn-link">more <clr-icon shape="arro
                         <label for="timeout"
                                 aria-haspopup="true"
                                 role="tooltip"
-                                class="tooltip tooltip-validation tooltip-sm"
+                                class="tooltip tooltip-top-left tooltip-validation tooltip-sm"
                                 [class.invalid]="addWebsite.get('timeout').invalid
                                     && (addWebsite.get('timeout').dirty ||
                                     addWebsite.get('timeout').touched)">

@@ -174,19 +174,21 @@ export class DashboardComponent implements OnInit {
       }
     )
   }
-  passwordChange = new FormGroup({
-    passwordChangeToThis: new FormControl('', Validators.compose([Validators.required]))
-  });
+  
   addWebsite = new FormGroup({
     url: new FormControl('', Validators.compose([Validators.required, Validators.pattern("https?:\\/\\/(www\\.)?[-a-zA-Z0-9@:%._\\+~#=]{2,256}\\.[a-z]{2,6}\\b([-a-zA-Z0-9@:%_\\+.~#?&//=]*)")])),
     timeout: new FormControl('', Validators.compose([Validators.required])),
-    title: new FormControl('', Validators.compose([Validators.required]))
+    title: new FormControl('', Validators.compose([Validators.required])),
+    interval: new FormControl('')
   });
   
   errorMsgAdd; addErrorAlertType = "info"; addErrorDisplay = false; addWebsiteStatus = "Add Website";
   
-
   passwordChangeButton = "Change Password";
+  
+  passwordChange = new FormGroup({
+    passwordChangeToThis: new FormControl('', Validators.compose([Validators.required]))
+  });
   
   passwordChangeTo(value) {
     this.http.get<response>(`https://main-${this.serverNum}.herokuapp.com/api/v2/?change=email&email=${this.userData.email}&to=${value.emailChangeToThis}&pass=${this.userData.pass}`).subscribe(
@@ -214,41 +216,9 @@ export class DashboardComponent implements OnInit {
     )
   }
   
-  notificationSettings = new FormGroup({
-    passwordChangeToThis: new FormControl('', Validators.compose([Validators.required]))
-  });
-
-  notificationButton = "Save Settings";
-  
-  notificationSettingsChange(value) {
-    this.http.get<response>(`https://main-${this.serverNum}.herokuapp.com/api/v2/?change=email&email=${this.userData.email}&to=${value.emailChangeToThis}&pass=${this.userData.pass}`).subscribe(
-      data => {
-        if (data.response === "mismatch") {
-          this.passwordChangeButton = "Unauthorized!";
-          setTimeout(() => { this.router.navigate(["/login", "unauthorized"]); }, 200);
-        } if (data.response === "success") {
-          this.passwordChangeButton = "Website Deleted. Taking you to all websites overview."; this.deleteWebsite.reset(); this.getOverviewData();
-          setTimeout(() => { this.passwordChangeButton = "Change Password"; }, 1000);
-        } if (data.response === "error") {
-          this.passwordChangeButton = "An error occured";
-          setTimeout(() => { this.passwordChangeButton = "Change Password"; }, 1000);
-        }
-      },
-      (err: HttpErrorResponse) => {
-        if (err.error instanceof Error) {
-          this.passwordChangeButton = "An error occured";
-          setTimeout(() => { this.passwordChangeButton = "Change Password"; }, 1000);
-        } else {
-          this.passwordChangeButton = "An error occured";
-          setTimeout(() => { this.passwordChangeButton = "Change Password"; }, 1000);
-        }
-      }
-    )
-  }
-  
   addWebsiteToDB(website) {
-    this.addWebsiteStatus = "Contacting server...";
-    this.http.get<response>(`https://main-${this.serverNum}.herokuapp.com/api/v2/?add=true&url=${website.url}&title=${website.title}&timeout=${website.timeout}&email=${this.userData.email}&pass=${this.userData.pass}`).subscribe(
+    this.addWebsiteStatus = "Contacting server..."; console.log(website)
+    this.http.get<response>(`https://main-${this.serverNum}.herokuapp.com/api/v2/?add=true&url=${website.url}&title=${website.title}&interval=${website.interval}&email=${this.userData.email}&pass=${this.userData.pass}`).subscribe(
       data => {
         if (data.response === "mismatch") {
           this.errorMsgAdd = "Incorrect email or password or account does not exist."

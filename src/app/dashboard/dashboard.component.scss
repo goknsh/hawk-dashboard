@@ -566,6 +566,10 @@
 					}
 				}
 				nav {
+					position: sticky;
+					top: 60px;
+					z-index: 2;
+					background: #fafafa;
 					ul {
 						list-style-type: none;
 						display: flex;
@@ -748,10 +752,6 @@
 			margin: 2rem auto 0;
 			max-width: 760px;
 			padding: 0 1rem;
-			.main {
-				font-size: .8rem;
-				font-weight: 500;
-			}
 			ul {
 				margin: 0.5rem 0 0 3.1em;
 			}
