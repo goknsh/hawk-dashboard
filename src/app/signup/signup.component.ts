@@ -55,11 +55,16 @@ export class SignupComponent implements OnInit {
           this.errorMsg = "An account with that email already exist."
           this.errorDisplay = "active";
           this.signupstatus = "Sign up";
+        } if (data.response === "verify") {
+          this.errorMsg = "You must verify your email."
+          this.errorDisplay = "active";
+          this.signupstatus = "Sign up";
+          this.router.navigate(["/login", "verify"]);
         } if (data.response === "success") {
           localStorage.setItem('currentUser', JSON.stringify({ email: data.email, name: data.name }));
           console.log(localStorage.getItem('currentUser'))
           this.signupstatus = "Successful. Signing you up...";
-          this.router.navigate(["/dashboard"]);
+          this.router.navigate(["/login", "verify"]);
         }
       },
       (err: HttpErrorResponse) => {

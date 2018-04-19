@@ -18,7 +18,7 @@
   <clr-header class="header-5">
     <div class="branding">
       <a href="#" routerLink="/home" class="nav-link">
-        <span class="title">Hawk <span class="label label-info">Beta</span></span>
+        <span class="title">Hawk</span>
       </a>
     </div>
       <div class="header-nav" [clr-nav-level]="2">
@@ -38,7 +38,7 @@
               <a routerLink="/dashboard" clrDropdownItem>Dashboard</a>
               <a routerLink="/dashboard/add" clrDropdownItem>Add Website</a>
               <a routerLink="/dashboard/account" clrDropdownItem>Account Settings</a>
-              <a routerLink="/logout" clrDropdownItem>Logout</a>
+              <a routerLink="/logout/true" clrDropdownItem>Logout</a>
           </clr-dropdown-menu>
         </clr-dropdown>
       </div>
@@ -53,12 +53,12 @@
           </span>
         </div>
         <div class="header-nav" [clr-nav-level]="1">
+            <a class="nav-link" href="/pro" routerLink="/pro" routerLinkActive="active"><span class="nav-text">Go<i>Pro</i></span></a>
             <a class="nav-link" href="/bot" routerLink="/bot" routerLinkActive="active"><span class="nav-text">Bot</span></a>
             <a class="nav-link" href="/sponsor" routerLink="/sponsor" routerLinkActive="active"><span class="nav-text">Sponsor Us</span></a>
             <a class="nav-link" href="/privacy" routerLink="/privacy" routerLinkActive="active"><span class="nav-text">Privacy</span></a>
             <a class="nav-link" href="/tos" routerLink="/tos" routerLinkActive="active"><span class="nav-text">ToS</span></a>
             <a class="nav-link" href="/stats" routerLink="/stats" routerLinkActive="active"><span class="nav-text">Stats</span></a>
-            <a class="nav-link" href="https://usehype.ga/" routerLinkActive="active"><span class="nav-text">hype Products</span></a>
         </div>
       </header>
     </div>

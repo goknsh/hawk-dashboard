@@ -26,7 +26,7 @@ export class LoginComponent implements OnInit {
   }
 
   serverNum;
-  errorMsg = "No errors recieved."; errorDisplay = "inactive"; loginstatus = "Login"; signupDisplay = false; sub; version; userStatus = JSON.parse(localStorage.getItem("currentUser"));
+  loginDisplay; unverifiedDisplay; errorMsg = "No errors recieved."; errorDisplay = "inactive"; loginstatus = "Login"; verifyDisplay = false; sub; version; userStatus = JSON.parse(localStorage.getItem("currentUser"));
   
   ngOnInit() {
     document.title = "Login - Hawk";
@@ -45,23 +45,39 @@ export class LoginComponent implements OnInit {
     this.sub = this.route.params.subscribe(params => {
        this.version = params['id'];
        if (this.version === 'unauthorized') {
-         this.signupDisplay = false;
+         this.loginDisplay = true;
+         this.verifyDisplay = false;
+         this.unverifiedDisplay = false;
          this.errorDisplay = "active";
          this.errorMsg = "You don’t have access to that page. Try logging in.";
        } if (this.version === 'loggedout') {
-         this.signupDisplay = false;
+         this.loginDisplay = true;
+         this.verifyDisplay = false;
+         this.unverifiedDisplay = false;
          this.errorDisplay = "active";
          this.errorMsg = "You’ve logged out successfully.";
        } if (this.version === 'timeout') {
-         this.signupDisplay = false;
+         this.loginDisplay = true;
+         this.verifyDisplay = false;
+         this.unverifiedDisplay = false;
          this.errorDisplay = "active";
          this.errorMsg = "Your session has timed out, so you’ve been logged out forcefully.";
        } if (this.version === 'new') {
-         this.signupDisplay = false;
+         this.loginDisplay = true;
+         this.verifyDisplay = false;
+         this.unverifiedDisplay = false;
+         this.errorDisplay = "inactive";
+         this.errorMsg = "No errors recieved.";
+       } if (this.version === 'unverified') {
+         this.loginDisplay = false;
+         this.verifyDisplay = false;
+         this.unverifiedDisplay = true;
          this.errorDisplay = "inactive";
          this.errorMsg = "No errors recieved.";
        } if (this.version === 'verify') {
-         this.signupDisplay = true;
+         this.loginDisplay = false;
+         this.verifyDisplay = true;
+         this.unverifiedDisplay = false;
          this.errorDisplay = "inactive";
          this.errorMsg = "No errors recieved.";
        }
@@ -84,8 +100,10 @@ export class LoginComponent implements OnInit {
         } if (data.response === "success") {
           localStorage.setItem('currentUser', JSON.stringify({ email: data.email, name: data.name, pass: credentials.password, expires: new Date().setHours(new Date().getHours() + 2)}));
           this.loginstatus = "Successful. Redirecting you...";
-          setTimeout(() => { this.router.navigate(["/dashboard/overview"]); }, 300);
-        } if (data.response === "error") {
+          setTimeout(() => { this.router.navigate(["/dashboard", "overview"]); }, 300);
+        } if (data.response === "verify") {
+          this.router.navigate(["/login", "unverified"]);
+        }  if (data.response === "error") {
           this.errorMsg = "Something is wrong with the server. Try again later."
           this.errorDisplay = "active";
           this.loginstatus = "Login";

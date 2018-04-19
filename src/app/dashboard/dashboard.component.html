@@ -1,5 +1,48 @@
 <section class="page">
-
+    <clr-modal [(clrModalOpen)]="basic">
+        <h3 class="modal-title">Hawk <i>Pro</i> & Version 2</h3>
+        <div class="modal-body">
+            <p>First of all, welcome to version 2! This version introduces:</p>
+            <ul class="list">
+                <li>Better Servers</li>
+                <li>New Region: Ireland</li>
+                <li>Account Settings: control your email and password</li>
+                <li>Check Settings: change the check&rsquo;s name, latency threshold and option to delete your website</li>
+                <li>Better look for the dashboard</li>
+                <li>Fix several bugs</li>
+            </ul>
+            <p>We are considering introducing a Pro version of Hawk. Pro will be based on a pay-for-what-you-use at: $0.00002 per interval per check. Anyways, Pro will have features like:</p>
+            <ul class="list">
+                <li>Custom intervals for checks</li>
+                <li>Collect data from real browsers, like:</li>
+                <ul class="list">
+                    <li>Image Compare for each check</li>
+                    <li>Saves Screenshot when an outage occurs</li>
+                    <li>Super-detailed analytics, with waterfall charts for each check</li>
+                    <li>SMS Notifications</li>
+                </ul>
+                <li>More regions</li>
+                <li>AWS Servers</li>
+                <li>DNS Logs for each check</li>
+                <li>PageFire: Basically Google Analytics, but powered by Hawk</li>
+                <li>Insights: Analyzes page to help you recognize things you can fix</li>
+                <li>GitHub commit ingeration with graph</li>
+                <li>Custom validators @ $1/validator/month</li>
+                <ul class="list">
+                    <li>Custom Errors for HTTP codes</li>
+                    <li>DNS rollback when down</li>
+                    <li>Show custom code when down</li>
+                    <li>GitHub commit rollback when down</li>
+                    <li>Webhooks</li>
+                </ul>
+                <li>DoThis @ $1/month: allows you to tell the browser what to do; and if it fails, we&rsquo;ll alert you. One custom validator included.</li>
+                <li>Monitor resources (CSS, JS, PNG, JPG, GIF) for each check.</li>
+            </ul>
+        </div>
+        <div class="modal-footer">
+            <a type="button" class="btn btn-primary" href="https://docs.google.com/forms/d/e/1FAIpQLSfstGI8II-4zHfAJH5fCRSeKGoukHTvgWcN_rxxwjtP3zKXMQ/viewform">More on Hawk <i>Pro</i></a>
+        </div>
+    </clr-modal>
     <div class="loader" [hidden]="!loading">
         <span class="spinner" [hidden]="errorDisplay">Loading...</span><br>
         <p [hidden]="errorDisplay">Loading</p>
@@ -28,7 +71,7 @@
         <div class="hero-outer">
             <div class="hero">
                 <h1>Account Settings - Soon</h1>
-                <p>Manage your password, email and notification settings</p>
+                <p>Manage your password and notification settings</p>
             </div>
         </div>
         <div class="content">
@@ -37,7 +80,17 @@
                     <label class="main">Change Password</label>
                     <div class="form-group">
                         <label for="currentPassword">Current Password</label>
-                        <input type="password" placeholder="Soon to be changed">
+                        <label for="currentPassword"
+                            aria-haspopup="true"
+                            role="tooltip"
+                            class="tooltip tooltip-top-left tooltip-validation tooltip-sm"
+                            [class.invalid]="passwordChange.get('currentPassword').invalid
+                                && (passwordChange.get('currentPassword').dirty || passwordChange.get('currentPassword').touched)">
+                            <input type="password" placeholder="Soon to be changed" formControlName="currentPassword">
+                            <span class="tooltip-content">
+                                Enter current password.
+                            </span>
+                        </label>
                     </div>
                     <div class="form-group">
                         <label for="newPassword">New Password</label>
@@ -49,7 +102,7 @@
                                 && (passwordChange.get('passwordChangeToThis').dirty || passwordChange.get('passwordChangeToThis').touched)">
                             <input type="password" placeholder="This will be new" formControlName="passwordChangeToThis">
                             <span class="tooltip-content">
-                                Password is required.
+                                A new password is required.
                             </span>
                         </label>
                     </div>
@@ -57,27 +110,70 @@
                         [disabled]="passwordChange.invalid">{{passwordChangeButton}}</button>
                 </section>
             </form>
-            <form class="form" [formGroup]="emailChange" (ngSubmit)="emailChangeTo(emailChange.value)">
+            <form class="form" [formGroup]="passwordChange" (ngSubmit)="passwordChangeTo(passwordChange.value)">
                 <section class="form-block">
-                    <label class="main">Change Email</label>
-                    <div class="form-group">
-                        <label for="currentPassword">Current Email</label>
-                        <input type="password" placeholder="{{this.userData.email}}" disabled>
-                    </div>
-                    <div class="form-group">
-                        <label for="newEmail">New Email</label>
-                        <label for="newEmail" aria-haspopup="true" role="tooltip" class="tooltip tooltip-top-left tooltip-validation tooltip-sm"
-                            [class.invalid]="emailChange.get('emailChangeToThis').invalid
-                                && (emailChange.get('emailChangeToThis').dirty || emailChange.get('emailChangeToThis').touched)">
-                            <input type="password" placeholder="myOtherEmail@domain.tld" formControlName="emailChangeToThis">
-                            <span class="tooltip-content">
-                                Email is required and must be valid.
-                            </span>
-                        </label>
-                    </div>
-                    <button class="btn btn-primary" type="submit" [disabled]="emailChange.invalid">{{emailControlButton}}</button>
+                    <label class="main">Notification Settings</label>
+                    <p>Coming Soon</p>
+                    <!--<div class="form-group">-->
+                    <!--    <label for="currentPassword">Current Password</label>-->
+                    <!--    <label for="currentPassword"-->
+                    <!--        aria-haspopup="true"-->
+                    <!--        role="tooltip"-->
+                    <!--        class="tooltip tooltip-top-left tooltip-validation tooltip-sm"-->
+                    <!--        [class.invalid]="passwordChange.get('currentPassword').invalid-->
+                    <!--            && (passwordChange.get('currentPassword').dirty || passwordChange.get('currentPassword').touched)">-->
+                    <!--        <input type="password" placeholder="Soon to be changed" formControlName="currentPassword">-->
+                    <!--        <span class="tooltip-content">-->
+                    <!--            Enter current password.-->
+                    <!--        </span>-->
+                    <!--    </label>-->
+                    <!--</div>-->
+                    <!--<div class="form-group">-->
+                    <!--    <label for="newPassword">New Password</label>-->
+                    <!--    <label for="newPassword"-->
+                    <!--        aria-haspopup="true"-->
+                    <!--        role="tooltip"-->
+                    <!--        class="tooltip tooltip-top-left tooltip-validation tooltip-sm"-->
+                    <!--        [class.invalid]="passwordChange.get('passwordChangeToThis').invalid-->
+                    <!--            && (passwordChange.get('passwordChangeToThis').dirty || passwordChange.get('passwordChangeToThis').touched)">-->
+                    <!--        <input type="password" placeholder="This will be new" formControlName="passwordChangeToThis">-->
+                    <!--        <span class="tooltip-content">-->
+                    <!--            A new password is required.-->
+                    <!--        </span>-->
+                    <!--    </label>-->
+                    <!--</div>-->
+                    <!--<button class="btn btn-primary" type="submit"-->
+                    <!--    [disabled]="passwordChange.invalid">{{passwordChangeButton}}</button>-->
                 </section>
             </form>
+            <!--<form class="form" [formGroup]="emailChange" (ngSubmit)="emailChangeTo(emailChange.value)">-->
+            <!--    <section class="form-block">-->
+            <!--        <label class="main">Change Email</label>-->
+            <!--        <div class="form-group">-->
+            <!--            <label for="currentEmail">Current Email</label>-->
+            <!--            <label for="currentEmail" aria-haspopup="true" role="tooltip" class="tooltip tooltip-top-left tooltip-validation tooltip-sm"-->
+            <!--                [class.invalid]="emailChange.get('currentEmail').invalid-->
+            <!--                    && (emailChange.get('currentEmail').dirty || emailChange.get('currentEmail').touched)">-->
+            <!--                <input type="email" placeholder="myCurrentEmail@domain.tld" spellcheck="false" formControlName="currentEmail">-->
+            <!--                <span class="tooltip-content">-->
+            <!--                    Email is required and must be valid.-->
+            <!--                </span>-->
+            <!--            </label>-->
+            <!--        </div>-->
+            <!--        <div class="form-group">-->
+            <!--            <label for="newEmail">New Email</label>-->
+            <!--            <label for="newEmail" aria-haspopup="true" role="tooltip" class="tooltip tooltip-top-left tooltip-validation tooltip-sm"-->
+            <!--                [class.invalid]="emailChange.get('emailChangeToThis').invalid-->
+            <!--                    && (emailChange.get('emailChangeToThis').dirty || emailChange.get('emailChangeToThis').touched)">-->
+            <!--                <input type="email" placeholder="myOtherEmail@domain.tld" spellcheck="false" formControlName="emailChangeToThis">-->
+            <!--                <span class="tooltip-content">-->
+            <!--                    Email is required and must be valid.-->
+            <!--                </span>-->
+            <!--            </label>-->
+            <!--        </div>-->
+            <!--        <button class="btn btn-primary" type="submit" [disabled]="emailChange.invalid">{{emailControlButton}}</button>-->
+            <!--    </section>-->
+            <!--</form>-->
         </div>
     </div>
 
@@ -138,7 +234,7 @@ Click to view more stats" class="btn btn-sm btn-link">more <clr-icon shape="arro
                         </div>
                     </div>
                     <div class="card-footer">
-                        <button title="Current Version" class="btn btn-sm btn-link">v0.5.0-ng</button>
+                        <button title="Current Version" class="btn btn-sm btn-link">v2.0.0</button>
                     </div>
                 </div>
             </div>
@@ -151,7 +247,7 @@ Click to view more stats" class="btn btn-sm btn-link">more <clr-icon shape="arro
                 <h1>404; not found</h1>
                 <p>We didn&rsquo;t find &ldquo;{{ currentURL }}&rdquo; our servers. Sorry. Check if the URL you entered is correct and has no typos. If you know there is supposed to be something here, please email <a href="mailto:contact@usehawk.ga">contact@usehawk.ga</a></p>
                 <div class="btn-group">
-                    <a href="/dashboard/add" routerLink="/dashboard/add" class="btn">Add website</a>
+                    <a href="/dashboard/add" routerLink="/dashboard/add" class="btn">Add check</a>
                     <a href="/dashboard/overview" routerLink="/dashboard/overview" class="btn btn-primary">Dashboard &rarr;</a>
                 </div>
             </div>
@@ -599,8 +695,8 @@ Click to view more stats" class="btn btn-sm btn-link">more <clr-icon shape="arro
         <div class="login-wrapper">
             <form [formGroup]="addWebsite" (ngSubmit)="addWebsiteToDB(addWebsite.value)" class="login">
                 <label class="title">
-                    Add new website
-                    <h5 class="hint">Add a new website that Hawk can monitor</h5>
+                    Add new check
+                    <h5 class="hint">Add a new check that Hawk can monitor</h5>
                 </label>
                 <div class="login-group">
                     <div class="form-group">
@@ -650,6 +746,13 @@ Click to view more stats" class="btn btn-sm btn-link">more <clr-icon shape="arro
                             </span>
                         </label>
                     </div>
+                    <clr-alert [clrAlertClosable]="false" [clrAlertType]="'alert-info'">
+                        <div class="alert-item">
+                            <span class="alert-text">
+                                For now, all checks will occur at 1 minute intervals. In the next update (v2.1) we plan on implementing custom intervals.
+                            </span>
+                        </div>
+                    </clr-alert>
                     <clr-alert [clrAlertClosable]="false" [hidden]="!addErrorDisplay" [clrAlertType]="addErrorAlertType">
                         <div class="alert-item">
                             <span class="alert-text">

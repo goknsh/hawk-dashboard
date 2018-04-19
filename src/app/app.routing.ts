@@ -12,6 +12,8 @@ import { TosComponent } from './tos/tos.component';
 import { StatsComponent } from './stats/stats.component';
 import { ArchiveComponent } from './archive/archive.component';
 import { BotComponent } from './bot/bot.component';
+import { ProComponent } from './pro/pro.component';
+import { VerifyComponent } from './verify/verify.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { AuthGuard } from './_guards/index';
 
@@ -24,10 +26,12 @@ export const ROUTES: Routes = [
     {path: 'privacy', component: PrivacyComponent},
     {path: 'archive', component: ArchiveComponent},
     {path: 'bot', component: BotComponent},
+    {path: 'pro', component: ProComponent},
     {path: 'abuse', redirectTo: 'bot', pathMatch: 'full'},
     {path: 'login', redirectTo: 'login/new', pathMatch: 'full'},
     {path: 'login/:id', component: LoginComponent},
-    {path: 'logout', component: LogoutComponent},
+    {path: 'logout/:id', component: LogoutComponent},
+    {path: 'verify/:id', component: VerifyComponent},
     {path: 'signup', component: SignupComponent},
     {path: 'stats', component: StatsComponent},
     {path: 'dashboard', redirectTo: 'dashboard/overview', pathMatch: 'full'},

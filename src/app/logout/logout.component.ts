@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-logout',
@@ -9,15 +9,24 @@ import { Router } from '@angular/router';
 export class LogoutComponent implements OnInit {
 
   constructor(
+    private route: ActivatedRoute,
     private router: Router
   ) {
     
   }
 
+  sub;
+
   ngOnInit() {
-    document.title = "Sign up - Ping by hype.";
+    document.title = "Logout - Ping by hype.";
     localStorage.removeItem("currentUser");
-    this.router.navigate(["/login", "loggedout"]);
+    this.sub = this.route.params.subscribe(params => {
+      if (params['id'] === "unauthorized") {
+        this.router.navigate(["/login", "unauthorized"]);
+      } if (params['id'] === "true") {
+        this.router.navigate(["/login", "loggedout"]);
+      }
+    });
   }
 
 }

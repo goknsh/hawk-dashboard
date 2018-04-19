@@ -25,7 +25,7 @@ export class DashboardComponent implements OnInit {
   
   userData = null; reqData: any; reqMoreData: any;
   userStatus = JSON.parse(localStorage.getItem("currentUser"));
-  loading = true; latencyLineChartJS; lookupLineChartJS;
+  loading = true; latencyLineChartJS; lookupLineChartJS; basic = true;
   localTimes = new Array(); sslTimes = new Array(); sslMoreAuth = new Array(); sslMoreExp = new Array(); siteURLMore;
   errorMsg; errorDisplay = false; loginstatus; site; item; currentURL;
   dashboardStatus = "Loading..."; dashboardClass; dashboardSub = "We are downloading data from our servers.";
@@ -34,15 +34,17 @@ export class DashboardComponent implements OnInit {
   moreName; moreNameRegex: any; usLatencyChart = new Array(); usLookupChart = new Array(); ieLatencyChart = new Array(); ieLookupChart = new Array(); usSpeedForCharts = new Array(); ieSpeedForCharts = new Array(); timesForLatency = new Array(); timesForLookup = new Array(); timesForLog = new Array(); outages = new Array();
 
   ngOnInit() {
-    document.title = "Dashboard - Hawk";
+    document.title = "Dashboard - Hawk"; setTimeout(() => { this.basic; }, 500);
     window.onbeforeunload = function(e) {
       sessionStorage.clear();
     };
+    
     if (new Date().getDate() < 15) {
       this.serverNum = "s1";
     } else {
       this.serverNum = "s2";
     }
+    
     if (localStorage.getItem("currentUser") === null) {
       this.router.navigate(["/login", "unauthorized"]);
     } else {
@@ -50,10 +52,8 @@ export class DashboardComponent implements OnInit {
         localStorage.clear();
         this.router.navigate(["/login", "timeout"]);
       } else {
-        this.getOverviewData();
-        this.loading = true; this.overviewDisplay = false;
-        this.overviewRepeat = setInterval(() => { this.getOverviewData(); }, 90000);
-      }
+          this.getOverviewData(); this.loading = true; this.overviewDisplay = false; this.overviewRepeat = setInterval(() => { this.getOverviewData(); }, 90000);
+        }
     }
     this.routerTrack();
   }
@@ -120,7 +120,9 @@ export class DashboardComponent implements OnInit {
       }
     });
   }
+  
   data: any;
+  
   getOverviewData() {
     this.userData = JSON.parse(localStorage.getItem("currentUser"));
     this.http.get(`https://main-${this.serverNum}.herokuapp.com/api/v2/?site=get&email=${this.userData.email}&pass=${this.userData.pass}`).subscribe(
@@ -130,6 +132,10 @@ export class DashboardComponent implements OnInit {
           this.dashboardStatus = "Something is wrong with our server.";
           this.dashboardSub = "We’ll try again in 90 seconds.";
           this.dashboardClass = "bad";
+        } if (this.data["response"] === "mismatch") {
+          this.dashboardStatus = "Unauthorized.";
+          this.dashboardSub = "You have a wrong password.";
+          setTimeout(() => { this.router.navigate(["/logout", "unauthorized"]); }, 500);
         } else {
           if (this.data.length === 0) {
             this.dashboardStatus = "No websites added.";
@@ -187,18 +193,20 @@ export class DashboardComponent implements OnInit {
   passwordChangeButton = "Change Password";
   
   passwordChange = new FormGroup({
+    currentPassword: new FormControl('', Validators.compose([Validators.required])),
     passwordChangeToThis: new FormControl('', Validators.compose([Validators.required]))
   });
   
   passwordChangeTo(value) {
-    this.http.get<response>(`https://main-${this.serverNum}.herokuapp.com/api/v2/?change=email&email=${this.userData.email}&to=${value.emailChangeToThis}&pass=${this.userData.pass}`).subscribe(
+    this.passwordChangeButton = "Contacting server...";
+    this.http.get<response>(`https://main-${this.serverNum}.herokuapp.com/api/v2/?change=pass&email=${this.userData.email}&pass=${value.currentPassword}&newpass=${value.passwordChangeToThis}`).subscribe(
       data => {
         if (data.response === "mismatch") {
           this.passwordChangeButton = "Unauthorized!";
-          setTimeout(() => { this.router.navigate(["/login", "unauthorized"]); }, 200);
+          setTimeout(() => { this.router.navigate(["/logout", "unauthorized"]); }, 200);
         } if (data.response === "success") {
-          this.passwordChangeButton = "Website Deleted. Taking you to all websites overview."; this.deleteWebsite.reset(); this.getOverviewData();
-          setTimeout(() => { this.passwordChangeButton = "Change Password"; }, 1000);
+          this.passwordChangeButton = "Password Changed. You’ll need to login again.";
+          setTimeout(() => { this.router.navigate(["/logout", "unauthorized"]); this.passwordChangeButton = "Change Password"; }, 1000);
         } if (data.response === "error") {
           this.passwordChangeButton = "An error occured";
           setTimeout(() => { this.passwordChangeButton = "Change Password"; }, 1000);
@@ -217,7 +225,7 @@ export class DashboardComponent implements OnInit {
   }
   
   addWebsiteToDB(website) {
-    this.addWebsiteStatus = "Contacting server..."; console.log(website)
+    this.addWebsiteStatus = "Contacting server...";
     this.http.get<response>(`https://main-${this.serverNum}.herokuapp.com/api/v2/?add=true&url=${website.url}&title=${website.title}&interval=${website.interval}&email=${this.userData.email}&pass=${this.userData.pass}`).subscribe(
       data => {
         if (data.response === "mismatch") {
@@ -261,6 +269,7 @@ export class DashboardComponent implements OnInit {
   }
   
   emailChange = new FormGroup({
+    currentEmail: new FormControl('', Validators.compose([Validators.email])),
     emailChangeToThis: new FormControl('', Validators.compose([Validators.email, Validators.required]))
   });
 

@@ -20,6 +20,8 @@ import { NotfoundComponent } from './notfound/notfound.component';
 import { StatsComponent } from './stats/stats.component';
 import { ArchiveComponent } from './archive/archive.component';
 import { BotComponent } from './bot/bot.component';
+import { ProComponent } from './pro/pro.component';
+import { VerifyComponent } from './verify/verify.component';
 
 @NgModule({
     declarations: [
@@ -35,7 +37,9 @@ import { BotComponent } from './bot/bot.component';
         NotfoundComponent,
         StatsComponent,
         ArchiveComponent,
-        BotComponent
+        BotComponent,
+        ProComponent,
+        VerifyComponent
     ],
     imports: [
         BrowserAnimationsModule,

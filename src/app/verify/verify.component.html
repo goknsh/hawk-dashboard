@@ -1,8 +1,8 @@
 <div class="login-wrapper">
     <form [formGroup]="login" [hidden]="!loginDisplay" (ngSubmit)="loginUser(login.value)" class="login">
         <label class="title">
-            Login to Hawk
-            <h5 class="hint">Use your email and password to sign in or create an account now</h5>
+            Last Step
+            <h5 class="hint">Login so we can complete verifying your account</h5>
         </label>
         <div class="login-group">
             <div class="form-group">
@@ -45,21 +45,10 @@
             <a href="/signup" routerLink="/signup" class="signup">Sign up</a>
         </div>
     </form>
-    <form [hidden]="!verifyDisplay" class="login">
+    <form [hidden]="loginDisplay" class="login">
         <div class="login-group">
             <h1>Thanks for signing up!</h1>
             <p>We&rsquo;ve sent you an email to confirm your identity. Please open the email and click on the &rdquo;Verify Email&ldquo; button so we can get you set up.</p>
-            <div class="btn-group btn-primary">
-                <a href="/login/new" routerLink="/login/new" class="btn">Login</a>
-                <a href="https://gmail.com/" class="btn">Gmail</a>
-                <a href="https://outlook.com/" class="btn">Outlook</a>
-            </div>
-        </div>
-    </form>
-    <form [hidden]="!unverifiedDisplay" class="login">
-        <div class="login-group">
-            <h1>There&rsquo;s a problem</h1>
-            <p>We&rsquo;ve sent you an email to confirm your identity, but you haven&rsquo;t confirmed your email yet; we won&rsquo;t let you login. So please open the email and click on the &rdquo;Verify Email&ldquo; button so we can get you set up.</p>
             <div class="btn-group btn-primary">
                 <a href="/login/new" routerLink="/login/new" class="btn">Login</a>
                 <a href="https://gmail.com/" class="btn">Gmail</a>
