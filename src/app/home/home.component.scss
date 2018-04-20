@@ -4,8 +4,8 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        text-align: center;
         .hero {
+            text-align: center;
             font-weight: 600;
             margin: 0 0 0 2rem;
             p {
@@ -14,15 +14,35 @@
             }
         }
     }
-    h1 {
-        text-align: center;
-    }
-    .feature-cards {
+    .eyas, .pro {
+        text-align: left;
         max-width: 1060px;
         margin: 0 auto;
-        // margin: 0 2rem 5rem 2rem;
-        display: flex;
-        justify-content: center;
+        padding: 0 1rem;
+        p {
+            margin: 0;
+        }
+        h3 {
+            padding: 0 0 0 .5rem;
+        }
+        .feature-cards {
+            max-width: 1060px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: center;
+            .col-lg-3 {
+                text-align: center;
+            }
+        }
+    }
+    .pro {
+        padding: 2rem 1rem;
+        p {
+            margin: 1rem 0 0 0;
+            &:first-of-type {
+                margin: 0;
+            }
+        }
     }
     @media (max-width: 992px) {
         .hero-outer {

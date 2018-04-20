@@ -139,14 +139,22 @@ export class DashboardComponent implements OnInit {
         } else {
           if (this.data.length === 0) {
             this.dashboardStatus = "No websites added.";
-            this.dashboardSub = "Looks like you don’t have Hawk monitoring any of you websites. Go ahead and add one.";
+            this.dashboardSub = "Looks like you don’t have Hawk monitoring anything. Go ahead and add a check.";
           } else {
             this.reqData = data; this.localTimes = []; this.sslTimes = []; this.sslTimes["us"] = []; this.sslTimes["ie"] = [];
             let i = 0; let notOk = 0;
               for (let item of this.reqData) {
                 this.localTimes.push(new Date(item[0]["data"]["time"] + " GMT").toLocaleTimeString());
-                this.sslTimes["us"].push(new Date(item["us-ssl-exp"]).toLocaleString());
-                this.sslTimes["ie"].push(new Date(item["ie-ssl-exp"]).toLocaleString());
+                if (item["us-ssl-exp"] !== "Not present") {
+                  this.sslTimes["us"].push(new Date(item["us-ssl-exp"]).toLocaleString());
+                } else {
+                  this.sslTimes["us"].push("Not present");
+                }
+                if (item["ie-ssl-exp"] !== "Not present") {
+                  this.sslTimes["ie"].push(new Date(item["ie-ssl-exp"]).toLocaleString());
+                } else {
+                  this.sslTimes["ie"].push("Not present");
+                }
                 if (this.reqData[i][0]["data"]["us-status"] !== "Up") {
                   notOk++;
                 } if (this.reqData[i][0]["data"]["ie-status"] !== "Up") {
@@ -188,7 +196,7 @@ export class DashboardComponent implements OnInit {
     interval: new FormControl('')
   });
   
-  errorMsgAdd; addErrorAlertType = "info"; addErrorDisplay = false; addWebsiteStatus = "Add Website";
+  errorMsgAdd; addErrorAlertType = "info"; addErrorDisplay = false; addWebsiteStatus = "Add Check";
   
   passwordChangeButton = "Change Password";
   
@@ -232,18 +240,18 @@ export class DashboardComponent implements OnInit {
           this.errorMsgAdd = "Incorrect email or password or account does not exist."
           this.addErrorAlertType = "alert-danger";
           this.addErrorDisplay = true;
-          this.addWebsiteStatus = "Add website";
+          this.addWebsiteStatus = "Add Check";
           setTimeout(() => { this.router.navigate(["/login", "unauthorized"]); }, 200);
         } if (data.response === "exists") {
           this.errorMsgAdd = "The website you're trying to add already exists."
           this.addErrorAlertType = "alert-danger";
           this.addErrorDisplay = true;
-          this.addWebsiteStatus = "Add website";
+          this.addWebsiteStatus = "Add Check";
         } if (data.response === "success") {
           this.errorMsgAdd = "Website successfully added."
           this.addErrorAlertType = "alert-success";
           this.addErrorDisplay = true;
-          this.addWebsiteStatus = "Add website";
+          this.addWebsiteStatus = "Add Check";
           this.addWebsite.reset();
           this.getOverviewData();
           setInterval(() => { this.addErrorDisplay = false; }, 3000);
@@ -251,7 +259,7 @@ export class DashboardComponent implements OnInit {
           this.errorMsgAdd = "Something is wrong with the server. Try again later."
           this.addErrorAlertType = "alert-danger";
           this.addErrorDisplay = true;
-          this.addWebsiteStatus = "Add website";
+          this.addWebsiteStatus = "Add Check";
         }
       },
       (err: HttpErrorResponse) => {
@@ -412,7 +420,15 @@ export class DashboardComponent implements OnInit {
         this.moreNameRegex = this.moreNameRegex.toString().replace(/,/g, '');
         this.siteURLMore = data["site"];
         this.sslMoreAuth.push(data["us-ssl-auth"]); this.sslMoreAuth.push(data["ie-ssl-auth"]); this.currentLatencyMore = data["thresh"];
-        this.sslMoreExp.push(new Date(data["us-ssl-exp"]).toLocaleString()); this.sslMoreExp.push(new Date(data["ie-ssl-exp"]).toLocaleString());
+        if (data["us-ssl-exp"] !== "Not present") {
+          this.sslMoreExp.push(new Date(data["us-ssl-exp"]).toLocaleString());
+        } else {
+          this.sslMoreExp.push("Not present");
+        } if (data["ie-ssl-exp"] !== "Not present") {
+          this.sslMoreExp.push(new Date(data["ie-ssl-exp"]).toLocaleString());
+        } else {
+          this.sslMoreExp.push("Not present");
+        }
         this.reqMoreData = new Array(); this.reqMoreData.push(data[0]); this.reqMoreData = this.reqMoreData[0]; this.reqMoreDataForOverview.push(this.reqMoreData[0][0]);
         let i = 0;
         this.timesForLatency = new Array(); this.timesForLookup = new Array(); this.timesForLog = new Array(); this.usLatencyChart = new Array(); this.usLookupChart = new Array(); this.usSpeedForCharts = new Array(); this.ieLatencyChart = new Array(); this.ieLookupChart = new Array(); this.ieSpeedForCharts = new Array(); this.outages = new Array();

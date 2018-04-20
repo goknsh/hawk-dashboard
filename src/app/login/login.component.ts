@@ -86,9 +86,9 @@ export class LoginComponent implements OnInit {
   
   login = new FormGroup({
     email: new FormControl('', Validators.compose([Validators.required, Validators.email])),
-    password: new FormControl('', Validators.required)
+    password: new FormControl('', Validators.compose([Validators.required]))
   });
-   
+  
   loginUser(credentials) {
     this.loginstatus = "Contacting server...";
     this.http.get<response>(`https://main-${this.serverNum}.herokuapp.com/api/v2/?login=true&email=${credentials.email}&pass=${credentials.password}`).subscribe(
@@ -100,9 +100,11 @@ export class LoginComponent implements OnInit {
         } if (data.response === "success") {
           localStorage.setItem('currentUser', JSON.stringify({ email: data.email, name: data.name, pass: credentials.password, expires: new Date().setHours(new Date().getHours() + 2)}));
           this.loginstatus = "Successful. Redirecting you...";
-          setTimeout(() => { this.router.navigate(["/dashboard", "overview"]); }, 300);
+          setTimeout(() => { this.loginstatus = "Login"; this.router.navigate(["/dashboard", "overview"]); }, 300);
         } if (data.response === "verify") {
+          this.loginstatus = "There’s a problem...";
           this.router.navigate(["/login", "unverified"]);
+          setTimeout(() => { this.loginstatus = "Login"; this.login.reset(); }, 300);
         }  if (data.response === "error") {
           this.errorMsg = "Something is wrong with the server. Try again later."
           this.errorDisplay = "active";
