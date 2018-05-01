@@ -234,7 +234,7 @@ export class DashboardComponent implements OnInit {
   
   addWebsiteToDB(website) {
     this.addWebsiteStatus = "Contacting server...";
-    this.http.get<response>(`https://main-${this.serverNum}.herokuapp.com/api/v2/?add=true&url=${website.url}&title=${website.title}&interval=${website.interval}&email=${this.userData.email}&pass=${this.userData.pass}`).subscribe(
+    this.http.get<response>(`https://main-${this.serverNum}.herokuapp.com/api/v2/?add=true&url=${website.url}&title=${website.title}&timeout=${website.timeout}&email=${this.userData.email}&pass=${this.userData.pass}`).subscribe(
       data => {
         if (data.response === "mismatch") {
           this.errorMsgAdd = "Incorrect email or password or account does not exist."
@@ -405,7 +405,7 @@ export class DashboardComponent implements OnInit {
     )
   }
   
-  letter: any; usUptime; ieUptime; usUptimeWk; ieUptimeWk; usUptimeMn; ieUptimeMn; usLatency; ieLatency; usLookup; ieLookup; usSpeed; ieSpeed;
+  letter: any; usUptime; ieUptime; usUptimeWk; ieUptimeWk; usUptimeMn; ieUptimeMn; usApd; usApdData; ieApd; ieApdData; usApdWk; usApdWkData; ieApdWk; ieApdWkData; usApdMn; usApdMnData; ieApdMn; ieApdMnData; usLatency; ieLatency; usLookup; ieLookup; usSpeed; ieSpeed;
   getMoreData(id) {
     this.loading = true; this.overviewDisplay = false; this.sslMoreAuth = new Array(); this.sslMoreExp = new Array(); this.reqMoreDataForOverview = new Array(); this.addDisplay = false; this.accountDisplay = false; this.currentLatencyMore; this.moreNameRegex = new Array();
     this.userData = JSON.parse(localStorage.getItem("currentUser"));
@@ -441,6 +441,7 @@ export class DashboardComponent implements OnInit {
           this.usSpeedForCharts.push(item[0]["us-speed"]); this.ieSpeedForCharts.push(item[0]["ie-speed"]);
           if (item[0]["outage"] === "1") {
             this.outages.push(i);
+            console.log(this.outages)
           }
           i++;
         }
@@ -455,6 +456,9 @@ export class DashboardComponent implements OnInit {
         this.usLatency = data["us-latency"]; this.ieLatency = data["ie-latency"];
         this.usLookup = data["us-lookup"]; this.ieLookup = data["ie-lookup"];
         this.usSpeed = data["us-speed"]; this.ieSpeed = data["ie-speed"];
+        this.usApd = data["us-apd"]; this.usApdData = data["us-apd-data"]; this.ieApd = data["ie-apd"]; this.ieApdData = data["ie-apd-data"];
+        this.usApdWk = data["us-apd-wk"]; this.usApdWkData = data["us-apd-wk-data"]; this.ieApdWk = data["ie-apd-wk"]; this.ieApdWkData = data["ie-apd-wk-data"];
+        this.usApdMn = data["us-apd-mn"]; this.usApdMnData = data["us-apd-mn-data"]; this.ieApdMn = data["ie-apd-mn"]; this.ieApdMnData = data["ie-apd-mn-data"];
         this.drawCharts();
         this.loading = false; this.moreDisplay = true;
       },

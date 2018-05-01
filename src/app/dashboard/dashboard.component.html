@@ -1,48 +1,4 @@
 <section class="page">
-    <clr-modal [(clrModalOpen)]="basic" [clrModalSize]="'lg'">
-        <h3 class="modal-title">Hawk <i>Pro</i> & Version 2</h3>
-        <div class="modal-body">
-            <p>First of all, welcome to version 2! This version introduces:</p>
-            <ul class="list">
-                <li>Better Servers</li>
-                <li>New Region: Ireland</li>
-                <li>Account Settings: control your email and password</li>
-                <li>Check Settings: change the check&rsquo;s name, latency threshold and option to delete your website</li>
-                <li>Better look for the dashboard</li>
-                <li>Fix several bugs</li>
-            </ul>
-            <p>We are considering introducing a Pro version of Hawk. Pro will be based on a pay-for-what-you-use at: $0.00002 per interval per check. Anyways, Pro will have features like:</p>
-            <ul class="list">
-                <li>Custom intervals for checks</li>
-                <li>Collect data from real browsers, like:</li>
-                <ul class="list">
-                    <li>Image Compare for each check</li>
-                    <li>Saves Screenshot when an outage occurs</li>
-                    <li>Super-detailed analytics, with waterfall charts for each check</li>
-                    <li>SMS Notifications</li>
-                </ul>
-                <li>More regions</li>
-                <li>AWS Servers</li>
-                <li>DNS Logs for each check</li>
-                <li>PageFire: Basically Google Analytics, but powered by Hawk</li>
-                <li>Insights: Analyzes page to help you recognize things you can fix</li>
-                <li>GitHub commit ingeration with graph</li>
-                <li>Custom validators @ $1/validator/month</li>
-                <ul class="list">
-                    <li>Custom Errors for HTTP codes</li>
-                    <li>DNS rollback when down</li>
-                    <li>Show custom code when down</li>
-                    <li>GitHub commit rollback when down</li>
-                    <li>Webhooks</li>
-                </ul>
-                <li>DoThis @ $1/month: allows you to tell the browser what to do; and if it fails, we&rsquo;ll alert you. One custom validator included.</li>
-                <li>Monitor resources (CSS, JS, PNG, JPG, GIF) for each check.</li>
-            </ul>
-        </div>
-        <div class="modal-footer">
-            <a type="button" class="btn btn-primary" href="https://docs.google.com/forms/d/e/1FAIpQLSfstGI8II-4zHfAJH5fCRSeKGoukHTvgWcN_rxxwjtP3zKXMQ/viewform">More on Hawk <i>Pro</i></a>
-        </div>
-    </clr-modal>
     <div class="loader" [hidden]="!loading">
         <span class="spinner" [hidden]="errorDisplay">Loading...</span><br>
         <p [hidden]="errorDisplay">Loading</p>
@@ -210,8 +166,8 @@ Click to view more stats"><input value="{{ item['name'] }}" readonly></a>
                                 </nav>
                                 
                                 <section>
-                                    <div class="tab1">Status: {{ item[0]["data"]["us-status"] }}; {{ item[0]["data"]["us-code"] }}<br>Uptime: {{ item['us-uptime'] }}%<br>Apdex: Soon<br>Latency: {{ item[0]["data"]["us-latency"] }}ms @ {{ item[0]["data"]["us-speed"] }}mbps<br>SSL Expiry: {{ sslTimes['us'][i] }}</div>
-                                    <div class="tab2">Status: {{ item[0]["data"]["ie-status"] }}; {{ item[0]["data"]["ie-code"] }}<br>Uptime: {{ item['ie-uptime'] }}%<br>Apdex: Soon<br>Latency: {{ item[0]["data"]["ie-latency"] }}ms @ {{ item[0]["data"]["ie-speed"] }}mbps<br>SSL Expiry: {{ sslTimes['ie'][i] }}</div>
+                                    <div class="tab1">Status: {{ item[0]["data"]["us-status"] }}; {{ item[0]["data"]["us-code"] }}<br>Uptime: {{ item['us-uptime'] }}%<br>Apdex: {{ item['us-apd'] }}<br>Latency: {{ item[0]["data"]["us-latency"] }}ms @ {{ item[0]["data"]["us-speed"] }}mbps<br>SSL Expiry: {{ sslTimes['us'][i] }}</div>
+                                    <div class="tab2">Status: {{ item[0]["data"]["ie-status"] }}; {{ item[0]["data"]["ie-code"] }}<br>Uptime: {{ item['ie-uptime'] }}%<br>Apdex: {{ item['ie-apd'] }}<br>Latency: {{ item[0]["data"]["ie-latency"] }}ms @ {{ item[0]["data"]["ie-speed"] }}mbps<br>SSL Expiry: {{ sslTimes['ie'][i] }}</div>
                                 </section>
                             </div>
                         </div>
@@ -245,7 +201,7 @@ Click to view more stats" class="btn btn-sm btn-link">more <clr-icon shape="arro
         <div class="hero-outer">
             <div class="hero">
                 <h1>404; not found</h1>
-                <p>We didn&rsquo;t find &ldquo;{{ currentURL }}&rdquo; our servers. Sorry. Check if the URL you entered is correct and has no typos. If you know there is supposed to be something here, please email <a href="mailto:contact@usehawk.ga">contact@usehawk.ga</a></p>
+                <p>We didn&rsquo;t find &ldquo;{{ currentURL }}&rdquo; our servers. Sorry. Check if the URL you entered is correct and has no typos. If you know there is supposed to be something here, please email <a href="mailto:hawk@akaanksh.ga">hawk@akaanksh.ga</a></p>
                 <div class="btn-group">
                     <a href="/dashboard/add" routerLink="/dashboard/add" class="btn">Add check</a>
                     <a href="/dashboard/overview" routerLink="/dashboard/overview" class="btn btn-primary">Dashboard &rarr;</a>
@@ -336,6 +292,47 @@ Click to view more stats" class="btn btn-sm btn-link">more <clr-icon shape="arro
                                         </div>
                                         <div class="card-text">
                                             This Month&rsquo;s Uptime
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            
+                            <div class="col-lg-4 col-md-8 col-sm-12 col-xs-12">
+                                <div class="card">
+                                    <div class="card-block">
+                                        <div class="card-title">
+                                            <h3>US: {{ usApd }} / <span title="Satisfied;Tolerated (+300ms);Frustrated (>300ms)">{{ usApdData }}</span></h3>
+                                            <h3>IE: {{ ieApd }} / <span title="Satisfied;Tolerated (+300ms);Frustrated (>300ms)">{{ ieApdData }}</span></h3>
+                                        </div>
+                                        <div class="card-text">
+                                            Apdex (All Time)
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-4 col-md-8 col-sm-12 col-xs-12">
+                                <div class="card">
+                                    <div class="card-block">
+                                        <div class="card-title">
+                                            <h3>US: {{ usApdWk }} / <span title="Satisfied;Tolerated (+300ms);Frustrated (>300ms)">{{ usApdWkData }}</span></h3>
+                                            <h3>IE: {{ ieApdWk }} / <span title="Satisfied;Tolerated (+300ms);Frustrated (>300ms)">{{ ieApdWkData }}</span></h3>
+                                        </div>
+                                        <div class="card-text">
+                                            This Week&rsquo;s Apdex
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-4 col-md-8 col-sm-12 col-xs-12">
+                                <div class="card">
+                                    <div class="card-block">
+                                        <div class="card-title">
+                                            <h3>US: {{ usApdMn }} / <span title="Satisfied;Tolerated (+300ms);Frustrated (>300ms)">{{ usApdMnData }}</span></h3>
+                                            <h3>IE: {{ ieApdMn }} / <span title="Satisfied;Tolerated (+300ms);Frustrated (>300ms)">{{ ieApdMnData }}</span></h3>
+                                        </div>
+                                        <div class="card-text">
+                                            This Month&rsquo;s Apdex
                                         </div>
                                     </div>
                                 </div>
@@ -564,7 +561,7 @@ Click to view more stats" class="btn btn-sm btn-link">more <clr-icon shape="arro
                             </clr-dg-column>
     
                             <clr-dg-row *clrDgItems="let item of reqMoreData; let i = index" [attr.data-index]="i">
-                                <clr-dg-cell>{{timesForLog[i]}}</clr-dg-cell>
+                                <clr-dg-cell>{{timesForLog[i+pagination.firstItem]}}</clr-dg-cell>
                                 <clr-dg-cell>{{item[0]["us-code"]}} / {{item[0]["ie-code"]}}</clr-dg-cell>
                                 <clr-dg-cell>{{item[0]["us-status"]}} / {{item[0]["ie-status"]}}</clr-dg-cell>
                                 <clr-dg-cell>{{item[0]["us-latency"]}}ms / {{item[0]["ie-latency"]}}ms</clr-dg-cell>
@@ -626,6 +623,7 @@ Click to view more stats" class="btn btn-sm btn-link">more <clr-icon shape="arro
                                         </span>
                                     </label>
                                 </div>
+                                <p>If you change the latency threshold, apdex will be reset.</p>
                                 <button class="btn btn-primary"
                                     type="submit"
                                     [disabled]="changeLatency.invalid">{{changeLatencyButton}}</button>
