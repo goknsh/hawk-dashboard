@@ -61,8 +61,7 @@ export class SignupComponent implements OnInit {
           this.signupstatus = "Sign up";
           this.router.navigate(["/login", "verify"]);
         } if (data.response === "success") {
-          localStorage.setItem('currentUser', JSON.stringify({ email: data.email, name: data.name }));
-          console.log(localStorage.getItem('currentUser'))
+          localStorage.setItem('currentUser', JSON.stringify({ email: credentials.email, name: credentials.name, pass: credentials.pass }));
           this.signupstatus = "Successful. Signing you up...";
           this.router.navigate(["/login", "verify"]);
         }

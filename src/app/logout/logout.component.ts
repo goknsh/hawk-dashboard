@@ -18,7 +18,7 @@ export class LogoutComponent implements OnInit {
   sub;
 
   ngOnInit() {
-    document.title = "Logout - Ping by hype.";
+    document.title = "Logout - Hawk";
     localStorage.removeItem("currentUser");
     this.sub = this.route.params.subscribe(params => {
       if (params['id'] === "unauthorized") {
