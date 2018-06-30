@@ -1,0 +1,9 @@
+[build]
+  command = "npm i npm@latest -g && ng build --prod --aot"
+  publish = "dist"
+  NODE_ENV = "8.11.1"
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
